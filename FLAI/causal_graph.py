@@ -3,6 +3,7 @@ import bnlearn as bn
 import networkx as nx
 import matplotlib.pyplot as plt
 class CausalGraph():
+
     def __init__(self, flai_dataset = None, node_edge = None, CPD = None, indepence_test = True,
                  verbose = 0):
         if flai_dataset is None and node_edge is None:
@@ -13,7 +14,7 @@ class CausalGraph():
             self.flai_dataset = flai_dataset
             self.graph = bn.structure_learning.fit(flai_dataset.data,verbose= verbose)
             if indepence_test:
-                self.graph = self.independence_test(self.graph, flai_dataset, test='chi_square', prune=True,verbose= verbose)
+                self.independence_test(flai_dataset, test='chi_square', prune=True,verbose= verbose)
         else:
             if CPD is None:
                 self.flai_dataset = flai_dataset
@@ -23,9 +24,8 @@ class CausalGraph():
                 self.graph = bn.make_DAG(node_edge, CPD=CPD,verbose= verbose)
 
 
-    def independence_test(self, graph, flai_dataset, test='chi_square', prune=True,verbose= 0):
-        graph = bn.independence_test(graph, flai_dataset.data, test, prune,verbose= verbose)
-        return graph
+    def independence_test(self, flai_dataset, test='chi_square', prune=True,verbose= 0):
+        self.graph = bn.independence_test(self.graph, flai_dataset.data, test, prune,verbose= verbose)
 
     def learn_cpd(self, flai_dataset = None, verbose = 0):
         if flai_dataset is None and self.flai_dataset is None:
@@ -37,7 +37,6 @@ class CausalGraph():
                 raise Exception("Data should be a FLAI.data.Data class")
             self.flai_dataset = flai_dataset
             self.graph = bn.parameter_learning.fit(self.graph, self.flai_dataset.data,verbose= verbose) 
-
 
     def plot(self, directed = True):
         if directed:
@@ -54,3 +53,8 @@ class CausalGraph():
     def get_CPDs(self):
         CPDs = bn.print_CPD(self.graph,verbose = 0)
         return CPDs
+
+    def generate_dataset(self, n_samples = 1000, methodtype = 'bayes', verbose = 0):
+        df = bn.sampling(self.graph, n= n_samples, methodtype = methodtype, verbose = verbose)
+        return data.Data(df, transform=False)
+
