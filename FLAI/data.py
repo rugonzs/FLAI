@@ -1,7 +1,7 @@
 import pandas as pd
 import bnlearn as bn
 from sklearn.metrics import accuracy_score,confusion_matrix
-
+from sklearn.preprocessing import OrdinalEncoder
 class Data():
     def __init__(self, data = None, transform = True, verbose = 0):
         if data is None:
@@ -9,16 +9,18 @@ class Data():
         self.data = data
         self.transform = transform
         if self.transform:
-            self.transform_data_numeric(self.data)
+            self.transform_data_numeric()
 
-    def transform_data_numeric(self, data = None, verbose = 0):
-        if data is None:
+    def transform_data_numeric(self, verbose = 0):
+        if self.data is None:
             raise Exception("Data is not provided")
-        dfhot, dfnum = bn.df2onehot(data,verbose = verbose)
-        
+        dfhot, dfnum = bn.df2onehot(self.data,verbose = verbose)
+        #self.data2 = dfnum
         ### Add the transform map to comeback.
-        self.data = dfnum
-        
+        enc = OrdinalEncoder()
+        enc.fit(self.data)
+        self.map_cat = enc.categories_
+        self.data = pd.DataFrame(enc.transform(self.data), columns = self.data.columns)
     def fairness_metrics(self, target_column = None, predicted_column = None, 
                         columns_fair = None):
         """Calculate fairness for subgroup of population"""
@@ -34,8 +36,11 @@ class Data():
             for c in columns_fair.keys():
                 privileged = self.metrics(target_column, predicted_column, {'name' : c, 'value': columns_fair[c]['privileged']})
                 unprivileged = self.metrics(target_column, predicted_column, {'name' : c, 'value': columns_fair[c]['unprivileged']})
+                disparate_impact = len(self.data[(self.data[predicted_column] == 1) & (self.data[c] == columns_fair[c]['unprivileged'])])  / len(self.data[(self.data[predicted_column] == 1) & (self.data[c] == columns_fair[c]['privileged'])]) 
                 result.update({c: {'privileged' : privileged, 'unprivileged' : unprivileged,
-                                   'fair_metrics' : {'Equal_Opportunity_Difference' : unprivileged['TPR'] - privileged['TPR']}}})
+                                   'fair_metrics' : {'Equal_Opportunity_Difference' : unprivileged['TPR'] - privileged['TPR'],
+                                                     'Disparate Impact' : unprivileged['PPP'] / privileged['PPP'],
+                                                     'Statistical parity Difference' :  unprivileged['PPP'] - privileged['PPP']}}})
 
         return result
     

@@ -2,20 +2,26 @@ from FLAI import data
 import bnlearn as bn
 import networkx as nx
 import matplotlib.pyplot as plt
+from netgraph import Graph,InteractiveGraph
 from pgmpy.factors.discrete import TabularCPD
 import numpy as np
 import itertools
+import math
 class CausalGraph():
 
     def __init__(self, flai_dataset = None, node_edge = None, CPD = None, indepence_test = True,
-                 verbose = 0):
+                 root_node = None, verbose = 0):
         if flai_dataset is None and node_edge is None:
             raise Exception("Data or edges should be provided")
         if node_edge is None:
             if not isinstance(flai_dataset,data.Data):
                 raise Exception("Data should be a FLAI.data.Data class")
             self.flai_dataset = flai_dataset
-            self.graph = bn.structure_learning.fit(flai_dataset.data,verbose= verbose)
+            if root_node is None:
+                self.graph = bn.structure_learning.fit(flai_dataset.data,verbose= verbose)
+            else:
+                self.graph = bn.structure_learning.fit(flai_dataset.data,root_node= root_node,verbose= verbose)
+            
             if indepence_test:
                 self.independence_test(flai_dataset, test='chi_square', prune=True,verbose= verbose)
         else:
@@ -58,11 +64,11 @@ class CausalGraph():
                 data_aux =  self.flai_dataset.data
                 for f in filters:
                     data_aux = data_aux[data_aux[f[0]] == f[1]]
-                list_probas = list_probas + [[(data_aux[node] == nv).sum() / len(data_aux[node] == nv) for nv in node_value]]
+                list_probas = list_probas + [[0.5 if math.isnan((data_aux[node] == nv).sum() / len(data_aux[node] == nv)) else (data_aux[node] == nv).sum() / len(data_aux[node] == nv) for nv in node_value]]
             list_cpd = list_cpd + [TabularCPD(node, len(node_value), np.array(list_probas).T.tolist(),
                         evidence= evidence,
                         evidence_card= [len(ev) for ev in evidence_value])]
-        self.graph = bn.make_DAG(self.graph['model_edges'], CPD=list_cpd,verbose= verbose)
+        self.graph = bn.make_DAG(list(self.graph['model_edges']), CPD=list_cpd,verbose= verbose)
     def plot(self, directed = True):
         if directed:
             G = nx.DiGraph()
@@ -74,6 +80,11 @@ class CausalGraph():
             G, with_labels=True, arrowsize=30, node_size=800, 
             alpha=0.3, font_weight="bold"
         )
+
+        #Graph(G, node_layout='radial', node_shape= 'o',
+        #node_labels=True ,node_size=10, arrows = directed
+        #    )
+        
     
     def get_CPDs(self):
         CPDs = bn.print_CPD(self.graph,verbose = 0)
@@ -97,8 +108,8 @@ class CausalGraph():
                 else:
                     fair_edges = fair_edges + [e]
         return fair_edges
-    def mitigate_calculation_cpd(self,verbose = 0,sensible_feature = None):
-        if sensible_feature is None:
+    def mitigate_calculation_cpd(self,verbose = 0,sensible_feature = []):
+        if len(sensible_feature) == 0:
             raise Exception("Sensible feature should be provided")
         list_cpd = []
         for node in list(self.graph['model'].nodes()):
@@ -113,9 +124,12 @@ class CausalGraph():
                 filters = [[filter[0],filter[1]]  for filter in zip(evidence,ec)]
                 data_aux =  self.flai_dataset.data
                 for f in filters:
-                    if f[0] != sensible_feature:
+                    if f[0] not in sensible_feature :
                         data_aux = data_aux[data_aux[f[0]] == f[1]]
-                list_probas = list_probas + [[(data_aux[node] == nv).sum() / len(data_aux[node] == nv) for nv in node_value]]
+                #if node in sensible_feature:
+                #    list_probas = list_probas + [[0.5 for nv in node_value]]
+                else:
+                    list_probas = list_probas + [[0.5 if math.isnan((data_aux[node] == nv).sum() / len(data_aux[node] == nv)) else (data_aux[node] == nv).sum() / len(data_aux[node] == nv) for nv in node_value]]
             list_cpd = list_cpd + [TabularCPD(node, len(node_value), np.array(list_probas).T.tolist(),
                         evidence= evidence,
                         evidence_card= [len(ev) for ev in evidence_value])]
