@@ -2,6 +2,7 @@ import pandas as pd
 import bnlearn as bn
 from sklearn.metrics import accuracy_score,confusion_matrix
 from sklearn.preprocessing import OrdinalEncoder
+import numpy as np
 class Data():
     def __init__(self, data = None, transform = True, verbose = 0):
         if data is None:
@@ -36,14 +37,30 @@ class Data():
             for c in columns_fair.keys():
                 privileged = self.metrics(target_column, predicted_column, {'name' : c, 'value': columns_fair[c]['privileged']})
                 unprivileged = self.metrics(target_column, predicted_column, {'name' : c, 'value': columns_fair[c]['unprivileged']})
-                disparate_impact = len(self.data[(self.data[predicted_column] == 1) & (self.data[c] == columns_fair[c]['unprivileged'])])  / len(self.data[(self.data[predicted_column] == 1) & (self.data[c] == columns_fair[c]['privileged'])]) 
+                #disparate_impact = len(self.data[(self.data[predicted_column] == 1) & (self.data[c] == columns_fair[c]['unprivileged'])])  / len(self.data[(self.data[predicted_column] == 1) & (self.data[c] == columns_fair[c]['privileged'])]) 
                 result.update({c: {'privileged' : privileged, 'unprivileged' : unprivileged,
-                                   'fair_metrics' : {'Equal_Opportunity_Difference' : unprivileged['TPR'] - privileged['TPR'],
-                                                     'Disparate Impact' : unprivileged['PPP'] / privileged['PPP'],
-                                                     'Statistical parity Difference' :  unprivileged['PPP'] - privileged['PPP']}}})
+                                   'fair_metrics' : {'EOD' : unprivileged['TPR'] - privileged['TPR'],
+                                                     'DI' : unprivileged['PPP'] / privileged['PPP'],
+                                                     'SPD' :  unprivileged['PPP'] - privileged['PPP'],
+                                                     'OD' :  (unprivileged['FPR'] - privileged['FPR']) + (unprivileged['TPR'] - privileged['TPR']),
+                                                     }}})
 
         return result
-    
+    def theil_index(self, y_true = None, y_pred = None, value_pred = None):
+        if y_true is None:
+            raise Exception("y_true is not provided")
+        if y_pred is None:
+            raise Exception("y_pred is not provided")
+        if value_pred is None:
+            raise Exception("value_pred is not provided")
+        
+        y_pred = y_pred.ravel()
+        y_true = y_true.ravel()
+        y_pred = (y_pred == value_pred).astype(np.float64)
+        y_true = (y_true == value_pred).astype(np.float64)
+        b = 1 + y_pred - y_true
+        return np.mean(np.log((b / np.mean(b))**b) / np.mean(b))
+           
     def metrics(self, target_column = None, predicted_column = None, column_filter = None):
         if target_column is None:
             raise Exception("target_column is not provided")
@@ -56,6 +73,7 @@ class Data():
             data = self.data[self.data[column_filter['name']] == column_filter['value']]
 
         cm=confusion_matrix(data[target_column],data[predicted_column])
+        ti = self.theil_index(data[target_column],data[predicted_column],1)
         TN, FP, FN, TP = cm.ravel()
         
         N = TP+FP+FN+TN #Total population
@@ -64,4 +82,17 @@ class Data():
         FPR = FP/(FP+TN) # False positive rate
         FNR = FN/(TP+FN) # False negative rate
         PPP = (TP + FP)/N # % predicted as positive
-        return {'ACC' : ACC, 'TPR' : TPR, 'FPR': FPR, 'FNR' : FNR, 'PPP' : PPP}
+        return {'ACC' : ACC, 'TN' : TN, 'FP' : FP, 'FN' : FN, 'TP' : TP,'TPR' : TPR, 'FPR': FPR, 'FNR' : FNR, 'PPP' : PPP }
+    def get_df_metrics(self, metrics_json = None):
+        if metrics_json is None:
+            raise Exception("metrics_json is not provided")
+        df_performance = pd.DataFrame(columns = ['ACC', 'TN', 'FP', 'FN', 'TP', 'TPR', 'FPR', 'FNR', 'PPP'])
+        df_fairness = pd.DataFrame(columns = ['EOD', 'DI', 'SPD', 'OD'])
+        for k in metrics_json.keys():
+            if k == 'model':
+                df_performance.loc['model'] = metrics_json['model'].values()
+            else:
+                df_performance.loc[k+'_privileged'] = metrics_json[k]['privileged'].values()
+                df_performance.loc[k+'_unprivileged'] = metrics_json[k]['unprivileged'].values()
+                df_fairness.loc[k+'_fair_metrics'] = metrics_json[k]['fair_metrics'].values()
+        return df_performance,df_fairness
