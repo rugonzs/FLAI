@@ -21,7 +21,16 @@ jobs:
         pip install sphinx
         pip install autodocsumm
         pip install sphinx-rtd-theme
-    
+        pip install bnlearn==0.7.8
+        pip install networkx==2.8.8
+        pip install matplotlib==3.6.2
+        pip install pgmpy==0.1.20
+        pip install numpy==1.23.4
+        pip install pandas==1.5.1
+        pip install scikit-learn==1.0.2
+        pip install scipy==1.9.3
+        pip install statsmodels==0.13.5'
+     
     - name: Build docs
       run: |
         cd docs
