@@ -3,7 +3,7 @@
 # FLAI : Fairness Learning in Artificial Intelligence
 
 [![Upload Python Package](https://github.com/rugonzs/FLAI/actions/workflows/python-publish.yml/badge.svg)](https://github.com/rugonzs/FLAI/actions/workflows/python-publish.yml)
-
+[![Upload Docs](https://github.com/rugonzs/FLAI/actions/workflows/docs.yml/badge.svg)](https://github.com/rugonzs/FLAI/actions/workflows/docs.yml)
 Python library developed by Rubén González during his phD. research. His mission? To mitigate bias and discrimination through the application of causal algorithms.
 
 [Demo](https://www.rubengonzalez.ai/demo)
