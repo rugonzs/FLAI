@@ -1,10 +1,14 @@
+<meta name="author" content="Rubén González">
+<meta name="description" content="mitigate bias and discrimination through the application of causal algorithms.">
+<meta name="copyright" content="Rubén González 2022">
+<meta name="keywords" content="causal, bayes, fairness, bias">
 # FLAI : Fairness Learning in Artificial Intelligence
 
 [![Upload Python Package](https://github.com/rugonzs/FLAI/actions/workflows/python-publish.yml/badge.svg)](https://github.com/rugonzs/FLAI/actions/workflows/python-publish.yml)
 
 Python library developed by Rubén González during his phD. research. His mission? To mitigate bias and discrimination through the application of causal algorithms.
 
-(Demo)[https://www.rubengonzalez.ai/demo]
+![Demo](https://www.rubengonzalez.ai/demo)
 
 ## Overview
 
@@ -85,7 +89,8 @@ from sklearn.model_selection import train_test_split
 
 mitigated_X = fair_data.data[['age', 'sex', 'credit_history','savings','employment' ]]
 mitigated_y = fair_data.data[['label']]
-mitigated_X_train, mitigated_X_test, mitigated_y_train, mitigated_y_test = train_test_split(mitigated_X, mitigated_y, test_size=0.7, random_state=54)
+mitigated_X_train, mitigated_X_test, mitigated_y_train, mitigated_y_test = train_test_split(mitigated_X,
+                                                           mitigated_y, test_size=0.7, random_state=54)
 model_mitigated = XGBClassifier()
 model_mitigated.fit(mitigated_X_train, mitigated_y_train)
 metrics = mitigated_dataset.fairness_metrics(target_column='label', predicted_column = 'Predicted',
