@@ -2,6 +2,8 @@
 <meta name="description" content="mitigate bias and discrimination through the application of causal algorithms.">
 <meta name="copyright" content="Rubén González 2022">
 <meta name="keywords" content="causal, bayes, fairness, bias">
+
+
 # FLAI : Fairness Learning in Artificial Intelligence
 
 [![Upload Python Package](https://github.com/rugonzs/FLAI/actions/workflows/python-publish.yml/badge.svg)](https://github.com/rugonzs/FLAI/actions/workflows/python-publish.yml)
