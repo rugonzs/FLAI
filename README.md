@@ -8,6 +8,8 @@ Python library developed by Rubén González during his phD. research. His missi
 
 [Demo](https://www.rubengonzalez.ai/demo)
 
+[Documentation](https://rugonzs.github.io/FLAI/)
+
 ## Overview
 
 ![Overview](https://github.com/rugonzs/FLAI/blob/main/Documents/fair_algorithm.svg)
