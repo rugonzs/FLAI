@@ -78,7 +78,7 @@ flai_graph.mitigate_calculation_cpd(sensible_feature = ['age','sex'])
 
 #### Inference
 
-Get impact of sensible features before mitigation. Sex, Age and Label 0 is the unfavorable value.
+Assess the impact of sensitive features before mitigation. Sex, Age and Label 0 is the unfavorable value.
 
 ```python
 flai_graph.inference(variables=['sex','label'], evidence={})
@@ -96,9 +96,11 @@ flai_graph.inference(variables=['age','label'], evidence={})
 | age | label |   p    |
 |-----|-------|--------|
 |  0  |   0   | 0.0641 |
-|  **0  |   **1**   | **0.1259** |
+|  **0**  |   **1**   | **0.1259** |
 |  1  |   0   | 0.2331 |
-|  **1  |   **1**   | **0.5769** |
+|  **1**  |   **1**   | **0.5769** |
+
+Assess the impact of sensitive features after mitigation. Changes in sex or age not affect the output.
 
 ```python
 mitigated_graph.inference(variables=['sex','label'], evidence={})
