@@ -44,6 +44,18 @@ class CausalGraph():
     def independence_test(self, flai_dataset, test='chi_square', prune=True,verbose= 0):
         self.graph = bn.independence_test(self.graph, flai_dataset.data, test, prune,verbose= verbose)
 
+    def inference(self,variables = [],evidence = {}):
+        if len(variables) == 0:
+            raise Exception("Variables should be provided") 
+        if len(evidence) == 0:
+            raise Exception("Evidence should be provided")  
+        return bn.inference.fit(self.graph, variables=variables, evidence=evidence).df          
+    def predict(self, data = None, variables = []):
+        if len(variables) == 0:
+            raise Exception("Variables should be provided") 
+        if data is None:
+            raise Exception("Data should be provided") 
+        return bn.predict(self.graph, data, variables = variables)
     def learn_cpd(self, flai_dataset = None, methodtype= None,verbose = 0):
         if methodtype is None:
             methodtype = 'bayes'

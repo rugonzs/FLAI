@@ -75,6 +75,53 @@ flai_graph.mitigate_edge_relation(sensible_feature=['sex','age'])
 flai_graph.mitigate_calculation_cpd(sensible_feature = ['age','sex'])
 
 ```
+
+#### Inference
+
+Get impact of sensible features before mitigation. Sex, Age and Label 0 is the unfavorable value.
+
+```python
+flai_graph.inference(variables=['sex','label'], evidence={})
+flai_graph.inference(variables=['age','label'], evidence={})
+
+```
+
+|   sex | label |   p    |
+|-------|-------|--------|
+|   0   |   0   | 0.1047 |
+|   **0**   |   **1**   | **0.2053** |
+|   1   |   0   | 0.1925 |
+|   **1**   |   **1**   | **0.4975** |
+
+| age | label |   p    |
+|-----|-------|--------|
+|  0  |   0   | 0.0641 |
+|  **0  |   **1**   | **0.1259** |
+|  1  |   0   | 0.2331 |
+|  **1  |   **1**   | **0.5769** |
+
+```python
+mitigated_graph.inference(variables=['sex','label'], evidence={})
+mitigated_graph.inference(variables=['age','label'], evidence={})
+
+```
+
+| sex | label |   p    |
+|-----|-------|--------|
+|  0  |   0   | 0.1498 |
+|  **0** |   **1**   | **0.3502** |
+|  1  |   0   | 0.1498 |
+|  **1** |   **1**   | **0.3502** |
+
+
+| age | label |   p    |
+|-----|-------|--------|
+|  0  |   0   | 0.1498 |
+|  **0**  |   **1**   | **0.3502** |
+|  1  |   0   | 0.1498 |
+|  **1**  |   **1**   | **0.3502** |
+
+
 ### Fair Data
 
 ```python
