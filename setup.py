@@ -13,7 +13,10 @@ LICENSE = 'Apache-2.0 license' #Tipo de licencia
 DESCRIPTION = 'Library to creat causal model and mitigate the bias.' #Descripción corta
 LONG_DESCRIPTION = (HERE / "README.md").read_text(encoding='utf-8') #Referencia al documento README con una descripción más elaborada
 LONG_DESC_TYPE = "text/markdown"
-
+PROJECT_URLS = {
+    "Documentation": "https://scikit-learn.org/stable/documentation.html",
+    "Source Code": 'https://github.com/rugonzs/FLAI',
+}
 
 #Paquetes necesarios para que funcione la libreía. Se instalarán a la vez si no lo tuvieras ya instalado
 INSTALL_REQUIRES = [
@@ -29,6 +32,7 @@ setup(
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
     url=URL,
+    project_urls=PROJECT_URLS,
     install_requires=INSTALL_REQUIRES,
     license=LICENSE,
     packages=find_packages(),
