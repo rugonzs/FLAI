@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FLAI.causal_graph &mdash; FLAI 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            FLAI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">FLAI</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FLAI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">FLAI.causal_graph</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for FLAI.causal_graph</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">FLAI</span> <span class="kn">import</span> <span class="n">data</span>
+<span class="kn">import</span> <span class="nn">bnlearn</span> <span class="k">as</span> <span class="nn">bn</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">pgmpy.factors.discrete</span> <span class="kn">import</span> <span class="n">TabularCPD</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<div class="viewcode-block" id="CausalGraph"><a class="viewcode-back" href="../../FLAI.html#FLAI.causal_graph.CausalGraph">[docs]</a><span class="k">class</span> <span class="nc">CausalGraph</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The CausalGraph class represents a causal Bayesian network and provides methods for its manipulation, </span>
+<span class="sd">    inference, mitigation, and learning.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CausalGraph.__init__"><a class="viewcode-back" href="../../FLAI.html#FLAI.causal_graph.CausalGraph.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flai_dataset</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">node_edge</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">CPD</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">indepence_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">root_node</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a CausalGraph object.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">        flai_dataset (flai.data.Data, optional): Dataset to be used for the network. Default is None.</span>
+<span class="sd">        node_edge (list of tuples, optional): List of tuples where each tuple represents an edge of the network. Default is None.</span>
+<span class="sd">        CPD (list of TabularCPD objects, optional): List of conditional probability distributions for the network. Default is None.</span>
+<span class="sd">        indepence_test (bool, optional): If true, performs an independence test on the network. Default is True.</span>
+<span class="sd">        root_node (str, optional): The root node of the network. Default is None.</span>
+<span class="sd">        target (str, optional): The target node of the network. Default is None.</span>
+<span class="sd">        verbose (int, optional): Verbosity level. Default is 0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">flai_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">node_edge</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Data or edges should be provided&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Please indicate the target feature&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node_edge</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">flai_dataset</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Data should be a FLAI.data.Data class&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flai_dataset</span> <span class="o">=</span> <span class="n">flai_dataset</span>
+            <span class="k">if</span> <span class="n">root_node</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">flai_dataset</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">&#39;hc&#39;</span><span class="p">,</span> <span class="n">scoretype</span><span class="o">=</span><span class="s1">&#39;bic&#39;</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span> <span class="n">verbose</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">flai_dataset</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="n">root_node</span><span class="o">=</span> <span class="n">root_node</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span> <span class="n">verbose</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model_edges&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">target</span> <span class="k">else</span> <span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model_edges&#39;</span><span class="p">]]</span>
+            <span class="n">list_edges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model_edges&#39;</span><span class="p">]</span>
+            <span class="n">ends</span> <span class="o">=</span> <span class="nb">list</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model_edges&#39;</span><span class="p">])[:,</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ends</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">n</span> <span class="o">!=</span> <span class="n">target</span><span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                    <span class="n">list_edges</span> <span class="o">=</span> <span class="n">list_edges</span> <span class="o">+</span> <span class="p">[(</span><span class="n">n</span><span class="p">,</span><span class="n">target</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model_edges&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">list_edges</span>
+            <span class="k">if</span> <span class="n">indepence_test</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">independence_test</span><span class="p">(</span><span class="n">flai_dataset</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;chi_square&#39;</span><span class="p">,</span> <span class="n">prune</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">CPD</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">flai_dataset</span> <span class="o">=</span> <span class="n">flai_dataset</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">make_DAG</span><span class="p">(</span><span class="n">node_edge</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span> <span class="n">verbose</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">flai_dataset</span> <span class="o">=</span> <span class="n">flai_dataset</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">make_DAG</span><span class="p">(</span><span class="n">node_edge</span><span class="p">,</span> <span class="n">CPD</span><span class="o">=</span><span class="n">CPD</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span> <span class="n">verbose</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CausalGraph.independence_test"><a class="viewcode-back" href="../../FLAI.html#FLAI.causal_graph.CausalGraph.independence_test">[docs]</a>    <span class="k">def</span> <span class="nf">independence_test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flai_dataset</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;chi_square&#39;</span><span class="p">,</span> <span class="n">prune</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs an independence test on the network.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">        flai_dataset (flai.data.Data): Dataset to be used for the independence test.</span>
+<span class="sd">        test (str, optional): Type of test to be performed. Default is &#39;chi_square&#39;.</span>
+<span class="sd">        prune (bool, optional): If true, prunes the network after the test. Default is True.</span>
+<span class="sd">        verbose (int, optional): Verbosity level. Default is 0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">independence_test</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span> <span class="n">flai_dataset</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">prune</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span> <span class="n">verbose</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CausalGraph.inference"><a class="viewcode-back" href="../../FLAI.html#FLAI.causal_graph.CausalGraph.inference">[docs]</a>    <span class="k">def</span> <span class="nf">inference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">variables</span> <span class="o">=</span> <span class="p">[],</span><span class="n">evidence</span> <span class="o">=</span> <span class="p">{}):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs inference on the network given evidence.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        variables (list, optional): List of variables to be included in the inference. Default is an empty list.</span>
+<span class="sd">        evidence (dict, optional): Dictionary of evidence in the form {variable: value}. Default is an empty dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Variables should be provided&quot;</span><span class="p">)</span> 
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">evidence</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Evidence should be provided&quot;</span><span class="p">)</span>  
+        <span class="k">return</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="n">evidence</span><span class="o">=</span><span class="n">evidence</span><span class="p">)</span><span class="o">.</span><span class="n">df</span>          </div>
+
+<div class="viewcode-block" id="CausalGraph.predict"><a class="viewcode-back" href="../../FLAI.html#FLAI.causal_graph.CausalGraph.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">variables</span> <span class="o">=</span> <span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Makes predictions based on the network.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        data (DataFrame, optional): Data used for making predictions. Default is None.</span>
+<span class="sd">        variables (list, optional): List of variables to be predicted. Default is an empty list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Variables should be provided&quot;</span><span class="p">)</span> 
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Data should be provided&quot;</span><span class="p">)</span> 
+        <span class="k">return</span> <span class="n">bn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="CausalGraph.learn_cpd"><a class="viewcode-back" href="../../FLAI.html#FLAI.causal_graph.CausalGraph.learn_cpd">[docs]</a>    <span class="k">def</span> <span class="nf">learn_cpd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flai_dataset</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span><span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Learn the Conditional Probability Distribution (CPD) for the network.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        flai_dataset (flai.data.Data, optional): Dataset to be used for learning the CPD. Default is None.</span>
+<span class="sd">        methodtype (str, optional): The method type to be used for learning. Default is None.</span>
+<span class="sd">        verbose (int, optional): Verbosity level. Default is 0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">methodtype</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">methodtype</span> <span class="o">=</span> <span class="s1">&#39;bayes&#39;</span>
+        <span class="k">if</span> <span class="n">flai_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flai_dataset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Data should be provided&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">flai_dataset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">parameter_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">flai_dataset</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="n">methodtype</span> <span class="o">=</span> <span class="n">methodtype</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span> <span class="n">verbose</span><span class="p">)</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">flai_dataset</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Data should be a FLAI.data.Data class&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flai_dataset</span> <span class="o">=</span> <span class="n">flai_dataset</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">parameter_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">flai_dataset</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="n">methodtype</span> <span class="o">=</span> <span class="n">methodtype</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span> <span class="n">verbose</span><span class="p">)</span> </div>
+
+<div class="viewcode-block" id="CausalGraph.calculate_cpd"><a class="viewcode-back" href="../../FLAI.html#FLAI.causal_graph.CausalGraph.calculate_cpd">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_cpd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the Conditional Probability Distribution (CPD) for the network.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        verbose (int, optional): Verbosity level. Default is 0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">list_cpd</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">()):</span>
+            <span class="n">node_value</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flai_dataset</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()))</span>
+            <span class="n">evidence</span> <span class="o">=</span> <span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model_edges&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node</span><span class="p">]</span>
+            <span class="n">evidence_value</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flai_dataset</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()))</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">evidence</span><span class="p">]</span>
+                
+            <span class="n">evidence_combination</span> <span class="o">=</span> <span class="n">evidence_value</span>
+            <span class="n">evidence_combination</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">evidence_combination</span><span class="p">))</span>
+            <span class="n">list_probas</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">ec</span> <span class="ow">in</span> <span class="n">evidence_combination</span><span class="p">:</span>
+                <span class="n">filters</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">filter</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">filter</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>  <span class="k">for</span> <span class="nb">filter</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">evidence</span><span class="p">,</span><span class="n">ec</span><span class="p">)]</span>
+                <span class="n">data_aux</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">flai_dataset</span><span class="o">.</span><span class="n">data</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
+                    <span class="n">data_aux</span> <span class="o">=</span> <span class="n">data_aux</span><span class="p">[</span><span class="n">data_aux</span><span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">==</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="n">list_probas</span> <span class="o">=</span> <span class="n">list_probas</span> <span class="o">+</span> <span class="p">[[</span><span class="mf">0.5</span> <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">((</span><span class="n">data_aux</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">==</span> <span class="n">nv</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_aux</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">==</span> <span class="n">nv</span><span class="p">))</span> <span class="k">else</span> <span class="p">(</span><span class="n">data_aux</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">==</span> <span class="n">nv</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_aux</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">==</span> <span class="n">nv</span><span class="p">)</span> <span class="k">for</span> <span class="n">nv</span> <span class="ow">in</span> <span class="n">node_value</span><span class="p">]]</span>
+            <span class="n">list_cpd</span> <span class="o">=</span> <span class="n">list_cpd</span> <span class="o">+</span> <span class="p">[</span><span class="n">TabularCPD</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">node_value</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">list_probas</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                        <span class="n">evidence</span><span class="o">=</span> <span class="n">evidence</span><span class="p">,</span>
+                        <span class="n">evidence_card</span><span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span> <span class="k">for</span> <span class="n">ev</span> <span class="ow">in</span> <span class="n">evidence_value</span><span class="p">])]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">make_DAG</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model_edges&#39;</span><span class="p">]),</span> <span class="n">CPD</span><span class="o">=</span><span class="n">list_cpd</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span> <span class="n">verbose</span><span class="p">)</span></div>
+<div class="viewcode-block" id="CausalGraph.plot"><a class="viewcode-back" href="../../FLAI.html#FLAI.causal_graph.CausalGraph.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directed</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plots the network.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        directed (bool, optional): If True, plots a directed graph. Default is True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">directed</span><span class="p">:</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+        <span class="n">G</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model_edges&#39;</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span> 
+        <span class="n">nx</span><span class="o">.</span><span class="n">draw_circular</span><span class="p">(</span>
+            <span class="n">G</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arrowsize</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> 
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">font_weight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span>
+        <span class="p">)</span></div>
+
+        <span class="c1">#Graph(G, node_layout=&#39;radial&#39;, node_shape= &#39;o&#39;,</span>
+        <span class="c1">#node_labels=True ,node_size=10, arrows = directed</span>
+        <span class="c1">#    )</span>
+        
+    
+<div class="viewcode-block" id="CausalGraph.get_CPDs"><a class="viewcode-back" href="../../FLAI.html#FLAI.causal_graph.CausalGraph.get_CPDs">[docs]</a>    <span class="k">def</span> <span class="nf">get_CPDs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the Conditional Probability Distributions (CPDs) of the network.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">CPDs</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">print_CPD</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span><span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">CPDs</span></div>
+
+<div class="viewcode-block" id="CausalGraph.generate_dataset"><a class="viewcode-back" href="../../FLAI.html#FLAI.causal_graph.CausalGraph.generate_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">generate_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">methodtype</span> <span class="o">=</span> <span class="s1">&#39;bayes&#39;</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a dataset based on the network.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        n_samples (int, optional): Number of samples to generate. Default is 1000.</span>
+<span class="sd">        methodtype (str, optional): The method type to be used for generation. Default is &#39;bayes&#39;.</span>
+<span class="sd">        verbose (int, optional): Verbosity level. Default is 0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">sampling</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">methodtype</span> <span class="o">=</span> <span class="n">methodtype</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CausalGraph.mitigate_edge_relation"><a class="viewcode-back" href="../../FLAI.html#FLAI.causal_graph.CausalGraph.mitigate_edge_relation">[docs]</a>    <span class="k">def</span> <span class="nf">mitigate_edge_relation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensible_feature</span> <span class="o">=</span> <span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mitigates the relationship of certain edges in the network.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        sensible_feature (list, optional): List of features for which to mitigate the relationship. Default is an empty list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1">### improve for more than one sensible feature </span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sensible_feature</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Sensible features should be provided&quot;</span><span class="p">)</span>
+        <span class="n">reverse_edge</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">### first apply transitivity and reverse</span>
+        <span class="n">maintain_edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model_edges&#39;</span><span class="p">]</span>
+        <span class="n">longitud</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">longitud</span><span class="o">!=</span><span class="mi">0</span><span class="p">):</span>
+            <span class="n">model_edges</span> <span class="o">=</span> <span class="n">maintain_edge</span>
+            <span class="n">maintain_edge</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">model_edges</span> <span class="k">if</span> <span class="p">((</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span>  <span class="n">sensible_feature</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">sensible_feature</span><span class="p">))</span> <span class="o">|</span> <span class="p">((</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sensible_feature</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sensible_feature</span><span class="p">))]</span> 
+            <span class="c1">#print(&#39;maintain&#39;,maintain_edge)</span>
+            <span class="n">longitud</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">for</span> <span class="n">sf</span> <span class="ow">in</span> <span class="n">sensible_feature</span><span class="p">:</span>
+                <span class="n">impact_sensible</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">model_edges</span> <span class="k">if</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">sf</span> <span class="p">]</span>
+                <span class="n">longitud</span> <span class="o">=</span> <span class="n">longitud</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">impact_sensible</span><span class="p">)</span>
+                <span class="c1">#print(impact_sensible)</span>
+                <span class="k">for</span> <span class="n">i_s</span> <span class="ow">in</span> <span class="n">impact_sensible</span><span class="p">:</span>
+                    <span class="n">sensible_impact</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">model_edges</span> <span class="k">if</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">sf</span> <span class="p">]</span>
+                    <span class="c1">#print(sensible_impact)</span>
+                    <span class="n">transitivity_edge</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i_s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">model_edges</span> <span class="k">if</span> <span class="p">(</span><span class="n">i_s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">sf</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">i_s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reverse_edge</span><span class="p">)</span> <span class="p">]</span>
+                    <span class="c1">#print(&#39;Transitivity&#39;,transitivity_edge)</span>
+                    <span class="n">maintain_edge</span> <span class="o">=</span> <span class="n">maintain_edge</span> <span class="o">+</span> <span class="n">transitivity_edge</span>
+                    <span class="k">if</span> <span class="p">((</span><span class="n">i_s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;label&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">maintain_edge</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">sf</span><span class="p">,</span> <span class="n">i_s</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reverse_edge</span><span class="p">):</span>
+                        <span class="n">maintain_edge</span> <span class="o">=</span> <span class="n">maintain_edge</span> <span class="o">+</span> <span class="p">[(</span><span class="n">sf</span><span class="p">,</span> <span class="n">i_s</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+                        <span class="n">reverse_edge</span> <span class="o">=</span> <span class="n">reverse_edge</span> <span class="o">+</span> <span class="p">[(</span><span class="n">i_s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">sf</span><span class="p">)]</span>
+            <span class="n">maintain_edge_aux</span> <span class="o">=</span> <span class="n">maintain_edge</span>
+            <span class="n">maintain_edge</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">mea</span> <span class="ow">in</span> <span class="n">maintain_edge_aux</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">mea</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">maintain_edge</span><span class="p">:</span>
+                    <span class="n">maintain_edge</span> <span class="o">=</span> <span class="n">maintain_edge</span> <span class="o">+</span> <span class="p">[</span><span class="n">mea</span><span class="p">]</span>
+            <span class="c1">#print(longitud)</span>
+            <span class="c1">#print(&#39;maintain&#39;,maintain_edge)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model_edges&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">maintain_edge</span>
+        <span class="k">return</span> <span class="n">maintain_edge</span></div>
+<div class="viewcode-block" id="CausalGraph.mitigate_calculation_cpd"><a class="viewcode-back" href="../../FLAI.html#FLAI.causal_graph.CausalGraph.mitigate_calculation_cpd">[docs]</a>    <span class="k">def</span> <span class="nf">mitigate_calculation_cpd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="n">sensible_feature</span> <span class="o">=</span> <span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mitigates the calculation of the Conditional Probability Distribution (CPD) for certain features.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        verbose (int, optional): Verbosity level. Default is 0.</span>
+<span class="sd">        sensible_feature (list, optional): List of sensible features for which to mitigate the CPD calculation. Default is an empty list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sensible_feature</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Sensible feature should be provided&quot;</span><span class="p">)</span>
+        <span class="n">list_cpd</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">()):</span>
+            <span class="n">node_value</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flai_dataset</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()))</span>
+            <span class="n">evidence</span> <span class="o">=</span> <span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model_edges&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node</span><span class="p">]</span>
+            <span class="n">evidence_value</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flai_dataset</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()))</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">evidence</span><span class="p">]</span>
+                
+            <span class="n">evidence_combination</span> <span class="o">=</span> <span class="n">evidence_value</span>
+            <span class="n">evidence_combination</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">evidence_combination</span><span class="p">))</span>
+            <span class="n">list_probas</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">ec</span> <span class="ow">in</span> <span class="n">evidence_combination</span><span class="p">:</span>
+                <span class="n">filters</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">filter</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">filter</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>  <span class="k">for</span> <span class="nb">filter</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">evidence</span><span class="p">,</span><span class="n">ec</span><span class="p">)]</span>
+                <span class="n">data_aux</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">flai_dataset</span><span class="o">.</span><span class="n">data</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sensible_feature</span> <span class="p">:</span>
+                        <span class="n">data_aux</span> <span class="o">=</span> <span class="n">data_aux</span><span class="p">[</span><span class="n">data_aux</span><span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">==</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">sensible_feature</span><span class="p">:</span>
+                    <span class="n">list_probas</span> <span class="o">=</span> <span class="n">list_probas</span> <span class="o">+</span> <span class="p">[[</span><span class="mi">1</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">node_value</span><span class="p">)</span> <span class="k">for</span> <span class="n">nv</span> <span class="ow">in</span> <span class="n">node_value</span><span class="p">]]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">list_probas</span> <span class="o">=</span> <span class="n">list_probas</span> <span class="o">+</span> <span class="p">[[</span><span class="mf">0.5</span> <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">((</span><span class="n">data_aux</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">==</span> <span class="n">nv</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_aux</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">==</span> <span class="n">nv</span><span class="p">))</span> <span class="k">else</span> <span class="p">(</span><span class="n">data_aux</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">==</span> <span class="n">nv</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_aux</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">==</span> <span class="n">nv</span><span class="p">)</span> <span class="k">for</span> <span class="n">nv</span> <span class="ow">in</span> <span class="n">node_value</span><span class="p">]]</span>
+            <span class="n">list_cpd</span> <span class="o">=</span> <span class="n">list_cpd</span> <span class="o">+</span> <span class="p">[</span><span class="n">TabularCPD</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">node_value</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">list_probas</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                        <span class="n">evidence</span><span class="o">=</span> <span class="n">evidence</span><span class="p">,</span>
+                        <span class="n">evidence_card</span><span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span> <span class="k">for</span> <span class="n">ev</span> <span class="ow">in</span> <span class="n">evidence_value</span><span class="p">])]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span>  <span class="n">bn</span><span class="o">.</span><span class="n">make_DAG</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;model_edges&#39;</span><span class="p">]),</span> <span class="n">CPD</span><span class="o">=</span><span class="n">list_cpd</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span> <span class="n">verbose</span><span class="p">)</span></div></div>
+        
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Rubén González.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
