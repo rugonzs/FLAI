@@ -2,7 +2,6 @@
 <meta name="description" content="mitigate bias and discrimination through the application of causal algorithms."/>
 <meta name="copyright" content="Rubén González 2022"/>
 <meta name="keywords" content="causal, bayes, fairness, bias"/>
-<meta name="google-site-verification" content="54zzJs1l4pqhJt6vb1FGkEuYorH0KGDZbRf0-HaSs54" />
 
 # FLAI : Fairness Learning in Artificial Intelligence
 
@@ -118,7 +117,22 @@ metrics = mitigated_dataset.fairness_metrics(target_column='label', predicted_co
 | age_fair_metrics| 0.00228 | 1.00394 | 0.00382 | 0.00981 |
 
 ##### Shap Results
+```python
+import shap
 
+explainer_original = shap.Explainer(model_original)
+explainer_mitigated = shap.Explainer(model_mitigated)
+shap_values_orignal = explainer_original(original_dataset.data[
+                                               ['sex', 'race','age','education']])
+shap_values_mitigated = explainer_mitigated(original_dataset.data[
+                                               ['sex', 'race', 'age','education']])
+shap.plots.beeswarm(shap_values_orignal)
+shap.plots.bar(shap_values_orignal)    
+
+shap.plots.beeswarm(shap_values_mitigated)
+shap.plots.bar(shap_values_mitigated)
+
+```
 ![shap values.](Documents/shap.svg)
 
 ## Citation
