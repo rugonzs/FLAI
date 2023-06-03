@@ -1,14 +1,12 @@
 name: docs
 on:
-  push:
-    branches:
-      - miss
+  push
 permissions:
   contents: read
 jobs:
   docs:
     name: Docs
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
 
     - uses: actions/checkout@v3
