@@ -7,9 +7,26 @@ import numpy as np
 import itertools
 import math
 class CausalGraph():
-
+    """
+    The CausalGraph class represents a causal Bayesian network and provides methods for its manipulation, 
+    inference, mitigation, and learning.
+    """
     def __init__(self, flai_dataset = None, node_edge = None, CPD = None, indepence_test = True,
                  root_node = None, target = None,  verbose = 0):
+        
+        """
+        Initialize a CausalGraph object.
+        
+        Args:
+        flai_dataset (flai.data.Data, optional): Dataset to be used for the network. Default is None.
+        node_edge (list of tuples, optional): List of tuples where each tuple represents an edge of the network. Default is None.
+        CPD (list of TabularCPD objects, optional): List of conditional probability distributions for the network. Default is None.
+        indepence_test (bool, optional): If true, performs an independence test on the network. Default is True.
+        root_node (str, optional): The root node of the network. Default is None.
+        target (str, optional): The target node of the network. Default is None.
+        verbose (int, optional): Verbosity level. Default is 0.
+        """
+
         if flai_dataset is None and node_edge is None:
             raise Exception("Data or edges should be provided")
         if target is None:
@@ -42,21 +59,57 @@ class CausalGraph():
 
 
     def independence_test(self, flai_dataset, test='chi_square', prune=True,verbose= 0):
+        """
+        Performs an independence test on the network.
+        
+        Args:
+        flai_dataset (flai.data.Data): Dataset to be used for the independence test.
+        test (str, optional): Type of test to be performed. Default is 'chi_square'.
+        prune (bool, optional): If true, prunes the network after the test. Default is True.
+        verbose (int, optional): Verbosity level. Default is 0.
+        """
+
         self.graph = bn.independence_test(self.graph, flai_dataset.data, test, prune,verbose= verbose)
 
     def inference(self,variables = [],evidence = {}):
+        """
+        Performs inference on the network given evidence.
+
+        Args:
+        variables (list, optional): List of variables to be included in the inference. Default is an empty list.
+        evidence (dict, optional): Dictionary of evidence in the form {variable: value}. Default is an empty dictionary.
+        """
+
         if len(variables) == 0:
             raise Exception("Variables should be provided") 
         if len(evidence) == 0:
             raise Exception("Evidence should be provided")  
         return bn.inference.fit(self.graph, variables=variables, evidence=evidence).df          
+
     def predict(self, data = None, variables = []):
+        """
+        Makes predictions based on the network.
+
+        Args:
+        data (DataFrame, optional): Data used for making predictions. Default is None.
+        variables (list, optional): List of variables to be predicted. Default is an empty list.
+        """
         if len(variables) == 0:
             raise Exception("Variables should be provided") 
         if data is None:
             raise Exception("Data should be provided") 
         return bn.predict(self.graph, data, variables = variables)
+    
     def learn_cpd(self, flai_dataset = None, methodtype= None,verbose = 0):
+        """
+        Learn the Conditional Probability Distribution (CPD) for the network.
+
+        Args:
+        flai_dataset (flai.data.Data, optional): Dataset to be used for learning the CPD. Default is None.
+        methodtype (str, optional): The method type to be used for learning. Default is None.
+        verbose (int, optional): Verbosity level. Default is 0.
+        """
+
         if methodtype is None:
             methodtype = 'bayes'
         if flai_dataset is None and self.flai_dataset is None:
@@ -70,6 +123,13 @@ class CausalGraph():
             self.graph = bn.parameter_learning.fit(self.graph, self.flai_dataset.data,methodtype = methodtype,verbose= verbose) 
 
     def calculate_cpd(self,verbose = 0):
+        """
+        Calculate the Conditional Probability Distribution (CPD) for the network.
+
+        Args:
+        verbose (int, optional): Verbosity level. Default is 0.
+        """
+
         list_cpd = []
         for node in list(self.graph['model'].nodes()):
             node_value = list(np.sort(self.flai_dataset.data[node].unique()))
@@ -90,6 +150,13 @@ class CausalGraph():
                         evidence_card= [len(ev) for ev in evidence_value])]
         self.graph = bn.make_DAG(list(self.graph['model_edges']), CPD=list_cpd,verbose= verbose)
     def plot(self, directed = True):
+        """
+        Plots the network.
+
+        Args:
+        directed (bool, optional): If True, plots a directed graph. Default is True.
+        """
+
         if directed:
             G = nx.DiGraph()
         else:
@@ -107,14 +174,34 @@ class CausalGraph():
         
     
     def get_CPDs(self):
+        """
+        Returns the Conditional Probability Distributions (CPDs) of the network.
+        """
+
         CPDs = bn.print_CPD(self.graph,verbose = 0)
         return CPDs
 
     def generate_dataset(self, n_samples = 1000, methodtype = 'bayes', verbose = 0):
+        """
+        Generates a dataset based on the network.
+
+        Args:
+        n_samples (int, optional): Number of samples to generate. Default is 1000.
+        methodtype (str, optional): The method type to be used for generation. Default is 'bayes'.
+        verbose (int, optional): Verbosity level. Default is 0.
+        """
+
         df = bn.sampling(self.graph, n= n_samples, methodtype = methodtype, verbose = verbose)
         return data.Data(df, transform=False)
 
     def mitigate_edge_relation(self, sensible_feature = []):
+        """
+        Mitigates the relationship of certain edges in the network.
+
+        Args:
+        sensible_feature (list, optional): List of features for which to mitigate the relationship. Default is an empty list.
+        """
+
         ### improve for more than one sensible feature 
         if len(sensible_feature) == 0:
             raise Exception("Sensible features should be provided")
@@ -151,6 +238,13 @@ class CausalGraph():
         self.graph['model_edges'] = maintain_edge
         return maintain_edge
     def mitigate_calculation_cpd(self,verbose = 0,sensible_feature = []):
+        """
+        Mitigates the calculation of the Conditional Probability Distribution (CPD) for certain features.
+
+        Args:
+        verbose (int, optional): Verbosity level. Default is 0.
+        sensible_feature (list, optional): List of sensible features for which to mitigate the CPD calculation. Default is an empty list.
+        """
         if len(sensible_feature) == 0:
             raise Exception("Sensible feature should be provided")
         list_cpd = []

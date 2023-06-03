@@ -10,7 +10,7 @@ Python library developed by Rubén González during his phD. research. His missi
 
 ## Overview
 
-[Overview](Documents/fair_algorithm.svg)
+![Overview](https://github.com/rugonzs/FLAI/blob/main/Documents/fair_algorithm.svg)
 
 **FLAI** is a Python library designed with two key functionalities: building a **causal algorithm** and **mitigating biases** within it.
 
@@ -52,7 +52,7 @@ flai_dataset = data.Data(df, transform=True)
 flai_graph = causal_graph.CausalGraph(flai_dataset, target = 'label')
 flai_graph.plot(directed = True)
 ```
-[Original Graph](Documents/original_graph.svg)
+![Original Graph](https://github.com/rugonzs/FLAI/blob/main/Documents/original_graph.svg)
 
 
 ### Causal Mitigation
@@ -63,7 +63,7 @@ flai_graph.plot(directed = True)
 
 flai_graph.mitigate_edge_relation(sensible_feature=['sex','age'])
 ```
-[Mitigated Graph.](Documents/mitigated_graph.svg)
+![Mitigated Graph.](https://github.com/rugonzs/FLAI/blob/main/Documents/mitigated_graph.svg)
 
 #### Table Probabilities Mitigation
 
@@ -126,7 +126,7 @@ mitigated_graph.inference(variables=['age','label'], evidence={})
 ```python
 fair_data = flai_graph.generate_dataset(n_samples = 1000, methodtype = 'bayes')
 ```
-[Correlation in original and Fair Data.](Documents/corr.svg)
+![Correlation in original and Fair Data.](https://github.com/rugonzs/FLAI/blob/main/Documents/corr.svg)
 
 #### Train Algorithm With Fair Data.
 
@@ -179,6 +179,6 @@ shap.plots.beeswarm(shap_values_mitigated)
 shap.plots.bar(shap_values_mitigated)
 
 ```
-[shap values.](Documents/shap.svg)
+![shap values.](https://github.com/rugonzs/FLAI/blob/main/Documents/shap.svg)
 
 ## Citation

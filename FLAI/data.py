@@ -5,6 +5,14 @@ from sklearn.preprocessing import OrdinalEncoder
 import numpy as np
 class Data():
     def __init__(self, data = None, transform = True, verbose = 0):
+        """
+        Initialize the Data class.
+
+        Args:
+        data (DataFrame, optional): The data to be used. If None, an exception is raised. Default is None.
+        transform (bool, optional): If True, the data is transformed to numerical form. Default is True.
+        verbose (int, optional): Verbosity level. Default is 0.
+        """
         if data is None:
             raise Exception("Data is not provided")
         self.data = data
@@ -13,6 +21,13 @@ class Data():
             self.transform_data_numeric()
 
     def transform_data_numeric(self, verbose = 0):
+        """
+        Transform the data to numerical form.
+
+        Args:
+        verbose (int, optional): Verbosity level. Default is 0.
+        """
+
         if self.data is None:
             raise Exception("Data is not provided")
         dfhot, dfnum = bn.df2onehot(self.data,verbose = verbose)
@@ -24,7 +39,15 @@ class Data():
         self.data = pd.DataFrame(enc.transform(self.data), columns = self.data.columns)
     def fairness_metrics(self, target_column = None, predicted_column = None, 
                         columns_fair = None):
-        """Calculate fairness for subgroup of population"""
+        """
+        Calculate fairness for a subgroup of population.
+
+        Args:
+        target_column (str, optional): The target column. If None, an exception is raised. Default is None.
+        predicted_column (str, optional): The predicted column. If None, an exception is raised. Default is None.
+        columns_fair (list, optional): List of column names to consider for fairness. Default is None.
+        """
+
         if target_column is None:
             raise Exception("target_column is not provided")
         if predicted_column is None:
@@ -47,6 +70,15 @@ class Data():
 
         return result
     def theil_index(self, y_true = None, y_pred = None, value_pred = None):
+        """
+        Calculate the Theil index for the prediction.
+
+        Args:
+        y_true (array, optional): The true labels. If None, an exception is raised. Default is None.
+        y_pred (array, optional): The predicted labels. If None, an exception is raised. Default is None.
+        value_pred (int, optional): The value to predict. If None, an exception is raised. Default is None.
+        """
+
         if y_true is None:
             raise Exception("y_true is not provided")
         if y_pred is None:
@@ -62,6 +94,15 @@ class Data():
         return np.mean(np.log((b / np.mean(b))**b) / np.mean(b))
            
     def metrics(self, target_column = None, predicted_column = None, column_filter = None):
+        """
+        Calculate various metrics for the prediction.
+
+        Args:
+        target_column (str, optional): The target column. If None, an exception is raised. Default is None.
+        predicted_column (str, optional): The predicted column. If None, an exception is raised. Default is None.
+        column_filter (dict, optional): Dictionary with keys as column names and values as filters. Default is None.
+        """
+
         if target_column is None:
             raise Exception("target_column is not provided")
         if predicted_column is None:
@@ -84,6 +125,12 @@ class Data():
         PPP = (TP + FP)/N # % predicted as positive
         return {'ACC' : ACC, 'TN' : TN, 'FP' : FP, 'FN' : FN, 'TP' : TP,'TPR' : TPR, 'FPR': FPR, 'FNR' : FNR, 'PPP' : PPP }
     def get_df_metrics(self, metrics_json = None):
+        """
+        Get the performance and fairness metrics as dataframes.
+
+        Args:
+        metrics_json (json, optional): The metrics in json format. If None, an exception is raised. Default is None.
+        """
         if metrics_json is None:
             raise Exception("metrics_json is not provided")
         df_performance = pd.DataFrame(columns = ['ACC', 'TN', 'FP', 'FN', 'TP', 'TPR', 'FPR', 'FNR', 'PPP'])
