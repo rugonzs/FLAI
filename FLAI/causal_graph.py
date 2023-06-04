@@ -71,7 +71,7 @@ class CausalGraph():
 
         self.graph = bn.independence_test(self.graph, flai_dataset.data, test, prune,verbose= verbose)
 
-    def inference(self,variables = [],evidence = {}):
+    def inference(self,variables = [],evidence = {},verbose=0):
         """
         Performs inference on the network given evidence.
 
@@ -82,11 +82,9 @@ class CausalGraph():
 
         if len(variables) == 0:
             raise Exception("Variables should be provided") 
-        if len(evidence) == 0:
-            raise Exception("Evidence should be provided")  
-        return bn.inference.fit(self.graph, variables=variables, evidence=evidence).df          
+        return bn.inference.fit(self.graph, variables=variables, evidence=evidence,verbose = verbose).df          
 
-    def predict(self, data = None, variables = []):
+    def predict(self, data = None, variables = [],verbose=0):
         """
         Makes predictions based on the network.
 
@@ -98,7 +96,7 @@ class CausalGraph():
             raise Exception("Variables should be provided") 
         if data is None:
             raise Exception("Data should be provided") 
-        return bn.predict(self.graph, data, variables = variables)
+        return bn.predict(self.graph, data, variables = variables, verbose=verbose)
     
     def learn_cpd(self, flai_dataset = None, methodtype= None,verbose = 0):
         """

@@ -3,8 +3,16 @@
 # FLAI : Fairness Learning in Artificial Intelligence
 
 [![Upload Python Package](https://github.com/rugonzs/FLAI/actions/workflows/python-publish.yml/badge.svg)](https://github.com/rugonzs/FLAI/actions/workflows/python-publish.yml)
+
 [![Upload Docs](https://github.com/rugonzs/FLAI/actions/workflows/docs.yml/badge.svg)](https://github.com/rugonzs/FLAI/actions/workflows/docs.yml)
 
+[![PyPI Version](https://img.shields.io/pypi/v/flai-causal)](https://pypi.org/project/flai-causal/)
+
+[![Downloads](https://static.pepy.tech/badge/flai-causal)](https://pepy.tech/project/flai-causal)
+
+[![Downloads](https://static.pepy.tech/badge/flai-causal/month)](https://pepy.tech/project/flai-causal)
+
+[![Downloads](https://static.pepy.tech/badge/flai-causal/week)](https://pepy.tech/project/flai-causal)
 
 Python library developed by Rubén González during his phD. research. His mission? To mitigate bias and discrimination through the application of causal algorithms.
 
