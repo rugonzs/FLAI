@@ -193,4 +193,8 @@ shap.plots.bar(shap_values_mitigated)
 ```
 ![shap values.](https://github.com/rugonzs/FLAI/blob/main/Documents/shap.svg)
 
+
+### References
+* https://erdogant.github.io/bnlearn/
+* http://pgmpy.org
 ## Citation
