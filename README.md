@@ -191,7 +191,7 @@ shap.plots.beeswarm(shap_values_mitigated)
 shap.plots.bar(shap_values_mitigated)
 
 ```
-![shap values.](https://github.com/rugonzs/FLAI/blob/main/Documents/shap_0.svg)
+![shap values.](https://github.com/rugonzs/FLAI/blob/main/Documents/shap_o.svg)
 
 ![shap values.](https://github.com/rugonzs/FLAI/blob/main/Documents/shap_m.svg)
 
