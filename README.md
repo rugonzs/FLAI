@@ -181,9 +181,9 @@ import shap
 explainer_original = shap.Explainer(model_original)
 explainer_mitigated = shap.Explainer(model_mitigated)
 shap_values_orignal = explainer_original(original_dataset.data[
-                                               ['sex', 'race','age','education']])
+['age', 'sex', 'credit_history','savings','employment']])
 shap_values_mitigated = explainer_mitigated(original_dataset.data[
-                                               ['sex', 'race', 'age','education']])
+ ['age', 'sex', 'credit_history','savings','employment']])
 shap.plots.beeswarm(shap_values_orignal)
 shap.plots.bar(shap_values_orignal)    
 
