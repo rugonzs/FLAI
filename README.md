@@ -41,6 +41,8 @@ Python library developed by Rubén González during his phD. research. His missi
 
     With the mitigated causal algorithm, a bias-free dataset can be generated. This dataset can be used for the training of other algorithms, enabling the bias mitigation process to extend to the initial stages of new model development.
 
+3. **Fairness Metric: Bias Detection**, This library introduces a novel metric to measure Fairness, which consists of a two-dimensional vector: Equality and Equity. This metric allows proper quantification of both justice dimensions.
+
 
 ## Installation
 
