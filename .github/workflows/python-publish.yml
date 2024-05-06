@@ -12,7 +12,7 @@ name: Upload Python Package
 on:
   push:
     branches:
-      - miss
+      - main
 permissions:
   contents: read
 
