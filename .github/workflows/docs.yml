@@ -2,7 +2,7 @@ name: docs
 on:
   push:
     branches:
-      - miss
+      - main
 permissions:
   contents: read
 jobs:
@@ -25,7 +25,7 @@ jobs:
         pip install sphinx-rtd-theme
         pip install setuptools
         pip install scikit-learn==1.0.2
-        pip install bnlearn==0.7.8 --no-deps
+        pip install bnlearn
         pip install networkx==2.8.8
         pip install matplotlib==3.6.2
         pip install pgmpy==0.1.20
