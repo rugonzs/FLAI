@@ -67,6 +67,14 @@ df_f,datos_f = flai_dataset.fairness_eqa_eqi(features = ['education'],
                               column_filter = ['sensible'],
                               plot = True)
 ```
+
+Group is the underprivileged group, in this case sensible = 0. The reference is the privileged group, in this case sensible = 1
+
+|   Group            |   reference        |   EQI   |   EQA    |   F    |
+|--------------------|--------------------|---------|----------|--------|
+| ['sensible'](0.0,) | ['sensible'](1.0,) | -004    | 0.08     |   0.09 |
+
+
 ![Original Graph](https://github.com/rugonzs/FLAI/blob/main/Documents/fairness_metric.svg)
 
 
