@@ -176,10 +176,9 @@ class Data():
         df_aux_ideal.columns = df_aux_ideal.columns.droplevel(0)
         df_aux_ideal = df_aux_ideal.reset_index()
         combinations_f = df_aux_ideal[features].value_counts().index.values
-        df_aux_ideal = df_aux_ideal.set_index(features)
-
         df_aux_ideal['px'] = df_aux_ideal['sum'] / df_aux_ideal['count']
-        df_aux_ideal = df_aux_ideal.sort_values(by='px')
+        df_aux_ideal = df_aux_ideal.sort_values(by=['px']+features)
+        df_aux_ideal = df_aux_ideal.set_index(features)
         df_aux_ideal['dx'] = [0] + (df_aux_ideal['count'].cumsum() / df_aux_ideal['count'].sum()).tolist()[:-1]
         df_aux['px'] = df_aux['sum'] / df_aux['count']
 
@@ -189,8 +188,13 @@ class Data():
         combinations = [[s + f for s in combinations_s] for f in combinations_f]
         for c,f in zip(combinations,combinations_f):
             for n in range(n_group):
-                df_aux_ideal.loc[f,'px_'+str(n)] = df_aux.loc[c[n]]['px']
-                df_aux_ideal.loc[f,'count_'+str(n)] = df_aux.loc[c[n]]['count']
+                if c[n] in df_aux.index:
+                    df_aux_ideal.loc[f,'px_'+str(n)] = df_aux.loc[c[n]]['px']
+                    df_aux_ideal.loc[f,'count_'+str(n)] = df_aux.loc[c[n]]['count']
+
+                else:
+                    df_aux_ideal.loc[f,'px_'+str(n)] = 0
+                    df_aux_ideal.loc[f,'count_'+str(n)] = 0
                 df_aux_ideal['dx_'+str(n)] = [0] + (df_aux_ideal['count_'+str(n)].cumsum() / df_aux_ideal['count_'+str(n)].sum()).tolist()[:-1]
                 
         if plot:
@@ -238,7 +242,7 @@ class Data():
         ax1.set_ylabel('EQI',fontsize="20")
         for n in range(n_group):
             ax1.plot(range(df_aux_ideal.shape[0]), 
-                 df_aux_ideal['dx_'+str(n)], '-',linestyle='dashed',  marker='o',markersize=10,linewidth=2,label=groups[n])
+                 df_aux_ideal['dx_'+str(n)], '-',linestyle='dashed',  marker='o',markersize=5,linewidth=2,label=groups[n])
         ax1.legend(fontsize="20")
 
         ### plot px
@@ -247,7 +251,7 @@ class Data():
         ax2.set_ylabel('EQA',fontsize="20")
         for n in range(n_group):
             ax2.plot(range(df_aux_ideal.shape[0]), 
-                 df_aux_ideal['px_'+str(n)], '-',linestyle='dashed',  marker='o',markersize=10,linewidth=2,label=groups[n])
+                 df_aux_ideal['px_'+str(n)], '-',linestyle='dashed',  marker='o',markersize=5,linewidth=2,label=groups[n])
         ax2.legend(fontsize="20")
 
         ### plot curve
@@ -256,7 +260,7 @@ class Data():
         ax3.set_ylabel('EQA',fontsize="20")
         for n in range(n_group):
             ax3.plot(df_aux_ideal['dx_'+str(n)], 
-                 df_aux_ideal['px_'+str(n)], '-',linestyle='dashed',  marker='o',markersize=10,linewidth=2,label=groups[n])
+                 df_aux_ideal['px_'+str(n)], '-',linestyle='dashed',  marker='o',markersize=5,linewidth=2,label=groups[n])
         ax3.legend(fontsize="20")
 
 

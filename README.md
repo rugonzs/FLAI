@@ -54,6 +54,9 @@ Python library developed by Rubén González during his phD. research. His missi
 pip install flai-causal
 ```
 ## Features Fairnes Metric
+
+### Single sensible feature
+
 Measure equality and equity.
 
 ```python
@@ -72,13 +75,32 @@ df_f,datos_f = flai_dataset.fairness_eqa_eqi(features = ['education'],
 
 Group is the underprivileged group, in this case sensible = 0. The reference is the privileged group, in this case sensible = 1
 
-|   Group            |   reference        |   EQI   |   EQA    |   F    |
-|--------------------|--------------------|---------|----------|--------|
-| sensible 0         |    sensible 1      | -004    | 0.08     |   0.09 |
+|   Group            |   reference        | Equity  | Equality |   Fairness   |
+|--------------------|--------------------|---------|----------|--------------|
+| sensible 0         |    sensible 1      | -004    | 0.08     |   0.09       |
 
 
 ![Original Graph](https://github.com/rugonzs/FLAI/blob/main/Documents/fairness_metric.svg)
 
+
+### Multiple Sensible Feature
+
+
+```python
+df_f,datos_f = flai_dataset.fairness_eqa_eqi(features = ['education','age'], 
+                              target_column = 'proba', 
+                              column_filter = ['race','sex'],
+                              plot = True)
+```
+
+|   Group            |   reference        | Equity  | Equality |   Fairness   |
+|--------------------|--------------------|---------|----------|--------------|
+| race_0 sex_0       |    race_1 sex_1    | -0.06   |   0.18   |    0.19      |
+| race_0 sex_1       |    race_1 sex_1    | -0.04   |   0.06   |    0.07      |
+| race_1 sex_0       |    race_1 sex_1    | -0.07   |   0.15   |    0.17      |
+
+
+![Original Graph](https://github.com/rugonzs/FLAI/blob/main/Documents/fairness_metric_orig.svg)
 
 
 ## Features Mitigation
@@ -204,6 +226,23 @@ metrics = mitigated_dataset.fairness_metrics(target_column='label', predicted_co
 |-----------------|---------|---------|---------|---------|
 | sex_fair_metrics| 0.00185 | 1.00221 | 0.00214 | 0.00448 |
 | age_fair_metrics| 0.00228 | 1.00394 | 0.00382 | 0.00981 |
+
+#### Equity, Equality and Fairness Curve
+
+```python
+df_f,datos_f = fair_data.fairness_eqa_eqi(features = ['education','age'], 
+                              target_column = 'proba', 
+                              column_filter = ['race','sex'],
+                              plot = True)
+```
+
+|   Group            |   reference        | Equity  | Equality |   Fairness   |
+|--------------------|--------------------|---------|----------|--------------|
+| race_0 sex_0       |    race_1 sex_1    | 0.0     |   0.0    |    0.0       |
+| race_0 sex_1       |    race_1 sex_1    | 0.0     |   0.0    |    0.0       |
+| race_1 sex_0       |    race_1 sex_1    | 0.0     |   0.0    |    0.0       |
+
+![Original Graph](https://github.com/rugonzs/FLAI/blob/main/Documents/fairness_metric_mit.svg)
 
 ##### Shap Results
 ```python

@@ -235,7 +235,7 @@ class CausalGraph():
             #print('maintain',maintain_edge)
         self.graph['model_edges'] = maintain_edge
         return maintain_edge
-    def mitigate_calculation_cpd(self,verbose = 0,sensible_feature = []):
+    def mitigate_calculation_cpd(self,verbose = 0,sensible_feature = [],fix_proportion = True):
         """
         Mitigates the calculation of the Conditional Probability Distribution (CPD) for certain features.
 
@@ -260,7 +260,7 @@ class CausalGraph():
                 for f in filters:
                     if f[0] not in sensible_feature :
                         data_aux = data_aux[data_aux[f[0]] == f[1]]
-                if node in sensible_feature:
+                if (node in sensible_feature) & fix_proportion:
                     list_probas = list_probas + [[1/len(node_value) for nv in node_value]]
                 else:
                     list_probas = list_probas + [[0.5 if math.isnan((data_aux[node] == nv).sum() / len(data_aux[node] == nv)) else (data_aux[node] == nv).sum() / len(data_aux[node] == nv) for nv in node_value]]
