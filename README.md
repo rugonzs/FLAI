@@ -24,11 +24,13 @@ Python library developed by Rubén González during his phD. research. His missi
 
 ![Overview](https://github.com/rugonzs/FLAI/blob/main/Documents/fair_algorithm.svg)
 
-**FLAI** is a Python library designed with two key functionalities: building a **causal algorithm** and **mitigating biases** within it.
+**FLAI** is a Python library designed with three key functionalities: detect **discrimination**, building a **causal algorithm**, and **mitigating biases** within it.
 
-1. **Causal Algorithm Creation:** This library facilitates the development of a reliable causal algorithm, setting the stage for impartial data analysis.
+1. **Fairness Metric: Bias Detection**, This library introduces a novel metric to measure Fairness, which consists of a two-dimensional vector: Equality and Equity. This metric allows proper quantification of both justice dimensions.
 
-2. **Bias Mitigation:** Fairness is pursued in two significant areas - **In-Training** and **Pre-Training**.
+2. **Causal Algorithm Creation:** This library facilitates the development of a reliable causal algorithm, setting the stage for impartial data analysis.
+
+3. **Bias Mitigation:** Fairness is pursued in two significant areas - **In-Training** and **Pre-Training**.
 
     ### In-Training Mitigation
 
@@ -41,7 +43,7 @@ Python library developed by Rubén González during his phD. research. His missi
 
     With the mitigated causal algorithm, a bias-free dataset can be generated. This dataset can be used for the training of other algorithms, enabling the bias mitigation process to extend to the initial stages of new model development.
 
-3. **Fairness Metric: Bias Detection**, This library introduces a novel metric to measure Fairness, which consists of a two-dimensional vector: Equality and Equity. This metric allows proper quantification of both justice dimensions.
+
 
 
 ## Installation
@@ -72,7 +74,7 @@ Group is the underprivileged group, in this case sensible = 0. The reference is 
 
 |   Group            |   reference        |   EQI   |   EQA    |   F    |
 |--------------------|--------------------|---------|----------|--------|
-| ['sensible'](0.0,) | ['sensible'](1.0,) | -004    | 0.08     |   0.09 |
+| sensible 0         |    sensible 1      | -004    | 0.08     |   0.09 |
 
 
 ![Original Graph](https://github.com/rugonzs/FLAI/blob/main/Documents/fairness_metric.svg)
