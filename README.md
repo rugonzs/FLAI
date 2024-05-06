@@ -14,7 +14,7 @@
 
 [![Downloads](https://static.pepy.tech/badge/flai-causal/week)](https://pepy.tech/project/flai-causal)
 
-Python library developed by Rubén González during his phD. research. His mission? To mitigate bias and discrimination through the application of causal algorithms.
+Python library developed by Rubén González during his phD. research. His mission? To mitigate bias and discrimination through the application of causal algorithms. Use the citation at the bottom to reference this work.
 
 [Demo](https://www.rubengonzalez.ai/demo)
 
