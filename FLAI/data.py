@@ -3,6 +3,10 @@ import bnlearn as bn
 from sklearn.metrics import accuracy_score,confusion_matrix
 from sklearn.preprocessing import OrdinalEncoder
 import numpy as np
+import matplotlib.pyplot as plt
+import math
+plt.style.use("seaborn-dark-palette")
+
 class Data():
     def __init__(self, data = None, transform = True, verbose = 0):
         """
@@ -143,3 +147,117 @@ class Data():
                 df_performance.loc[k+'_unprivileged'] = metrics_json[k]['unprivileged'].values()
                 df_fairness.loc[k+'_fair_metrics'] = metrics_json[k]['fair_metrics'].values()
         return df_performance,df_fairness
+    
+    def fairness_eqa_eqi(self, features = None, target_column = None, column_filter = None,plot = True):
+        """
+        Calculate fairness metrics for the data.
+
+        Args:
+        target_column (str, optional): The target column. If None, an exception is raised. Default is None.
+        features (dict, optional): Dictionary with keys as column names as feature. Default is None.
+        column_filter (dict, optional): Dictionary with keys as column names as sensible. Default is None.
+        """
+
+        if target_column is None:
+            raise Exception("target_column is not provided")
+        if features is None:
+            raise Exception("features is not provided")
+        if column_filter is None:
+            raise Exception("predicted_column is not column_filter")
+  
+  
+        df_aux = self.data.groupby(by=column_filter + features).agg({target_column: ['count', 'sum']})
+        df_aux_ideal = self.data.groupby(by=features).agg({target_column: ['count', 'sum']})
+        df_aux.columns = df_aux.columns.droplevel(0)
+        df_aux = df_aux.reset_index()
+        combinations_s = df_aux[column_filter].value_counts().index.values
+        df_aux = df_aux.set_index(column_filter + features)
+
+        df_aux_ideal.columns = df_aux_ideal.columns.droplevel(0)
+        df_aux_ideal = df_aux_ideal.reset_index()
+        combinations_f = df_aux_ideal[features].value_counts().index.values
+        df_aux_ideal = df_aux_ideal.set_index(features)
+
+        df_aux_ideal['px'] = df_aux_ideal['sum'] / df_aux_ideal['count']
+        df_aux_ideal = df_aux_ideal.sort_values(by='px')
+        df_aux_ideal['dx'] = [0] + (df_aux_ideal['count'].cumsum() / df_aux_ideal['count'].sum()).tolist()[:-1]
+        df_aux['px'] = df_aux['sum'] / df_aux['count']
+
+
+        n_group = combinations_s.shape[0]
+        groups = [str(column_filter) + str(s) for s in combinations_s]
+        combinations = [[s + f for s in combinations_s] for f in combinations_f]
+        for c,f in zip(combinations,combinations_f):
+            for n in range(n_group):
+                df_aux_ideal.loc[f,'px_'+str(n)] = df_aux.loc[c[n]]['px']
+                df_aux_ideal.loc[f,'count_'+str(n)] = df_aux.loc[c[n]]['count']
+                df_aux_ideal['dx_'+str(n)] = [0] + (df_aux_ideal['count_'+str(n)].cumsum() / df_aux_ideal['count_'+str(n)].sum()).tolist()[:-1]
+                
+        if plot:
+            self.plot_fairness_eqa_eqi(df_aux_ideal,n_group,groups)
+        n_p = -1
+        p_max = 0
+        d_max = 0
+        for n in range(n_group):
+            p_aux = df_aux_ideal['px_'+str(n)].max()
+            d_aux = df_aux_ideal['dx_'+str(n)].max()
+            if p_aux > p_max:
+                p_max = p_aux
+                d_max = d_aux
+                n_p = n
+            elif p_aux == p_max:
+                if d_aux < d_max:
+                    p_max = p_aux
+                    d_max = d_aux
+                    n_p = n
+
+        df_f = pd.DataFrame(columns = ['group','reference','EQI','EQA','F'])
+        for n in range(n_group):
+            if n != n_p:
+                eqi = (df_aux_ideal['dx_'+str(n_p)] - df_aux_ideal['dx_'+str(n)]).values
+                eqa = (df_aux_ideal['px_'+str(n_p)] - df_aux_ideal['px_'+str(n)]).values
+
+                EQI = np.round(eqi.mean(),2)
+                EQA = np.round(eqa.mean(),2)
+                F = np.round(math.sqrt(EQA**2 + EQI**2),2)
+                df_f.loc[n] = [groups[n],groups[n_p],EQI,EQA,F]
+        return df_f,df_aux_ideal
+                
+    def plot_fairness_eqa_eqi(self, df_aux_ideal,n_group,groups):
+        fig = plt.figure(figsize=(20, 12))
+        fig.subplots_adjust(hspace=0.8)
+        gs = fig.add_gridspec(6,4)
+
+        ax1 = fig.add_subplot(gs[0:2, 0:2])
+        ax2 = fig.add_subplot(gs[0:2, 2:4])
+        ax3 = fig.add_subplot(gs[2:6, :])
+
+        ### plot dx
+        ax1.set_title('Distribution',fontsize="20")
+        ax1.set_xlabel('Feature Vector',fontsize="20")
+        ax1.set_ylabel('EQI',fontsize="20")
+        for n in range(n_group):
+            ax1.plot(range(df_aux_ideal.shape[0]), 
+                 df_aux_ideal['dx_'+str(n)], '-',linestyle='dashed',  marker='o',markersize=10,linewidth=2,label=groups[n])
+        ax1.legend(fontsize="20")
+
+        ### plot px
+        ax2.set_title('Probability',fontsize="20")
+        ax2.set_xlabel('Feature Vector',fontsize="20")
+        ax2.set_ylabel('EQA',fontsize="20")
+        for n in range(n_group):
+            ax2.plot(range(df_aux_ideal.shape[0]), 
+                 df_aux_ideal['px_'+str(n)], '-',linestyle='dashed',  marker='o',markersize=10,linewidth=2,label=groups[n])
+        ax2.legend(fontsize="20")
+
+        ### plot curve
+        ax3.set_title('Fairness Curve',fontsize="20")
+        ax3.set_xlabel('EQI',fontsize="20")
+        ax3.set_ylabel('EQA',fontsize="20")
+        for n in range(n_group):
+            ax3.plot(df_aux_ideal['dx_'+str(n)], 
+                 df_aux_ideal['px_'+str(n)], '-',linestyle='dashed',  marker='o',markersize=10,linewidth=2,label=groups[n])
+        ax3.legend(fontsize="20")
+
+
+        plt.show()

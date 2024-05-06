@@ -49,8 +49,27 @@ Python library developed by Rubén González during his phD. research. His missi
 ```bash
 pip install flai-causal
 ```
+## Features Fairnes Metric
+Measure equality and equity.
 
-## Features
+```python
+from FLAI import data
+from FLAI import causal_graph
+import pandas as pd
+
+df = pd.read_parquet('../Data/case_1.parquet')
+flai_dataset = data.Data(df, transform=False)
+
+df_f,datos_f = flai_dataset.fairness_eqa_eqi(features = ['education'], 
+                              target_column = 'proba', 
+                              column_filter = ['sensible'],
+                              plot = True)
+```
+![Original Graph](https://github.com/rugonzs/FLAI/blob/main/Documents/fairness_metric.svg)
+
+
+
+## Features Mitigation
 
 ### Causal Creation
 
@@ -200,3 +219,20 @@ shap.plots.bar(shap_values_mitigated)
 * https://erdogant.github.io/bnlearn/
 * http://pgmpy.org
 ## Citation
+
+Mitigation Paper
+```
+@article{GONZALEZSENDINO2024384,
+title = {Mitigating bias in artificial intelligence: Fair data generation via causal models for transparent and explainable decision-making},
+journal = {Future Generation Computer Systems},
+volume = {155},
+pages = {384-401},
+year = {2024},
+issn = {0167-739X},
+doi = {https://doi.org/10.1016/j.future.2024.02.023},
+url = {https://www.sciencedirect.com/science/article/pii/S0167739X24000694},
+author = {Rubén González-Sendino and Emilio Serrano and Javier Bajo},
+keywords = {Causal model, Bias mitigation, Fairness, Responsible artificial intelligence, Bayes},
+abstract = {In the evolving field of Artificial Intelligence, concerns have arisen about the opacity of certain models and their potential biases. This study aims to improve fairness and explainability in AI decision making. Existing bias mitigation strategies are classified as pre-training, training, and post-training approaches. This paper proposes a novel technique to create a mitigated bias dataset. This is achieved using a mitigated causal model that adjusts cause-and-effect relationships and probabilities within a Bayesian network. Contributions of this work include (1) the introduction of a novel mitigation training algorithm for causal model; (2) a pioneering pretraining methodology for producing a fair dataset for Artificial Intelligence model training; (3) the diligent maintenance of sensitive features in the dataset, ensuring that these vital attributes are not overlooked during analysis and model training; (4) the enhancement of explainability and transparency around biases; and finally (5) the development of an interactive demonstration that vividly displays experimental results and provides the code for facilitating replication of the work.}
+}
+```
