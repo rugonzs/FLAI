@@ -271,7 +271,7 @@ shap.plots.bar(shap_values_mitigated)
 * http://pgmpy.org
 ## Citation
 
-Mitigation Paper
+[Mitigation Paper](https://www.sciencedirect.com/science/article/pii/S0167739X24000694)
 ```
 @article{GONZALEZSENDINO2024384,
 title = {Mitigating bias in artificial intelligence: Fair data generation via causal models for transparent and explainable decision-making},
