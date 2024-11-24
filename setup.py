@@ -20,7 +20,7 @@ PROJECT_URLS = {
 
 #Paquetes necesarios para que funcione la libreía. Se instalarán a la vez si no lo tuvieras ya instalado
 INSTALL_REQUIRES = [
-      'scikit-learn==1.5.2','bnlearn==0.7.8','networkx==2.8.8','matplotlib==3.6.2','pgmpy==0.1.20','numpy==1.23.4', 'pandas==1.5.1','scipy==1.9.3','statsmodels==0.13.5'
+      'scikit-learn==1.5.2','bnlearn==0.10.2','networkx==3.4.2','matplotlib==3.9.2','pgmpy==0.1.26','numpy==1.26.4', 'pandas==2.2.3','scipy==1.11.4','statsmodels==0.14.4'
       ]
 
 setup(
