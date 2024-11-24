@@ -147,8 +147,89 @@ class Data():
                 df_performance.loc[k+'_unprivileged'] = metrics_json[k]['unprivileged'].values()
                 df_fairness.loc[k+'_fair_metrics'] = metrics_json[k]['fair_metrics'].values()
         return df_performance,df_fairness
+    def fairness_eqa_eqi(flai_dataset, features = None, target_column = None, column_filter = None,plot = True):
+        """
+        Calculate fairness metrics for the data.
+
+        Args:
+        target_column (str, optional): The target column. If None, an exception is raised. Default is None.
+        features (dict, optional): Dictionary with keys as column names as feature. Default is None.
+        column_filter (dict, optional): Dictionary with keys as column names as sensible. Default is None.
+        """
+
+        if target_column is None:
+            raise Exception("target_column is not provided")
+        if features is None:
+            raise Exception("features is not provided")
+        if column_filter is None:
+            raise Exception("predicted_column is not column_filter")
+  
     
-    def fairness_eqa_eqi(self, features = None, target_column = None, column_filter = None,plot = True):
+        df_aux = flai_dataset.data.groupby(by=column_filter + features).agg({target_column: ['count', 'sum']})
+        df_aux_ideal = flai_dataset.data.groupby(by=features).agg({target_column: ['count', 'sum']})
+        df_aux.columns = df_aux.columns.droplevel(0)
+        df_aux = df_aux.reset_index()
+        combinations_s = df_aux[column_filter].value_counts().index.values
+        df_aux = df_aux.set_index(column_filter + features)
+
+        df_aux_ideal.columns = df_aux_ideal.columns.droplevel(0)
+        df_aux_ideal = df_aux_ideal.reset_index()
+        combinations_f = df_aux_ideal[features].value_counts().index.values
+        df_aux_ideal['px'] = df_aux_ideal['sum'] / df_aux_ideal['count']
+        df_aux_ideal = df_aux_ideal.sort_values(by=['px']+features)
+        df_aux_ideal = df_aux_ideal.set_index(features)
+        df_aux_ideal['dx'] = [0] + (df_aux_ideal['count'].cumsum() / df_aux_ideal['count'].sum()).tolist()[:-1]
+        
+        df_aux['px'] = df_aux['sum'] / df_aux['count']
+
+        n_group = combinations_s.shape[0]
+        groups = [str(column_filter) + str(s) for s in combinations_s]
+        combinations = [[s + f for s in combinations_s] for f in combinations_f]
+        start_time = time.time()
+        df_aux = df_aux.reset_index().set_index(features)
+        
+        for cs,n in zip(combinations_s,range(n_group)):
+            condition = True
+            for feature, value in zip(column_filter, cs):
+                condition &= (df_aux[feature] == value)
+            filtered_aux = df_aux[condition]
+            df_aux_ideal = df_aux_ideal.merge(filtered_aux,how='outer',left_index=True,right_index=True,suffixes=["","_"+str(n)]).fillna(0)
+            df_aux_ideal = df_aux_ideal.reset_index().sort_values(by=['px']+features)
+            df_aux_ideal = df_aux_ideal.set_index(features)
+            df_aux_ideal['dx_'+str(n)] = [0] + (df_aux_ideal['count_'+str(n)].cumsum() / df_aux_ideal['count_'+str(n)].sum()).tolist()[:-1]
+                
+        stop_time = time.time()
+        print(stop_time - start_time)
+        if plot:
+            flai_dataset.plot_fairness_eqa_eqi(df_aux_ideal,n_group,groups)
+        n_p = -1
+        p_max = 0
+        d_max = 0
+        for n in range(n_group):
+            p_aux = df_aux_ideal['px_'+str(n)].max()
+            d_aux = df_aux_ideal['dx_'+str(n)].max()
+            if p_aux > p_max:
+                p_max = p_aux
+                d_max = d_aux
+                n_p = n
+            elif p_aux == p_max:
+                if d_aux < d_max:
+                    p_max = p_aux
+                    d_max = d_aux
+                    n_p = n
+
+        df_f = pd.DataFrame(columns = ['group','reference','EQI','EQA','F'])
+        for n in range(n_group):
+            if n != n_p:
+                eqi = (df_aux_ideal['dx_'+str(n_p)] - df_aux_ideal['dx_'+str(n)]).values
+                eqa = (df_aux_ideal['px_'+str(n_p)] - df_aux_ideal['px_'+str(n)]).values
+
+                EQI = np.round(eqi.mean(),2)
+                EQA = np.round(eqa.mean(),2)
+                F = np.round(math.sqrt(EQA**2 + EQI**2),2)
+                df_f.loc[n] = [groups[n],groups[n_p],EQI,EQA,F]
+        return df_f,df_aux_ideal
+    def fairness_eqa_eqi_old(self, features = None, target_column = None, column_filter = None,plot = True):
         """
         Calculate fairness metrics for the data.
 
