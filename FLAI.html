@@ -46,8 +46,14 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">FLAI</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">FLAI package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#flai-causal-graph-module">FLAI.causal_graph module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#flai-data-module">FLAI.data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-FLAI.causal_graph">FLAI.causal_graph module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#FLAI.causal_graph.CausalGraph"><code class="docutils literal notranslate"><span class="pre">CausalGraph</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-FLAI.data">FLAI.data module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#FLAI.data.Data"><code class="docutils literal notranslate"><span class="pre">Data</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-FLAI">Module contents</a></li>
 </ul>
 </li>
@@ -85,11 +91,198 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="flai-causal-graph-module">
-<h2>FLAI.causal_graph module<a class="headerlink" href="#flai-causal-graph-module" title="Link to this heading"></a></h2>
+<section id="module-FLAI.causal_graph">
+<span id="flai-causal-graph-module"></span><h2>FLAI.causal_graph module<a class="headerlink" href="#module-FLAI.causal_graph" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="FLAI.causal_graph.CausalGraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">FLAI.causal_graph.</span></span><span class="sig-name descname"><span class="pre">CausalGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flai_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_edge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CPD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indepence_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/causal_graph.html#CausalGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.causal_graph.CausalGraph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The CausalGraph class represents a causal Bayesian network and provides methods for its manipulation,
+inference, mitigation, and learning.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.causal_graph.CausalGraph.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flai_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_edge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CPD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indepence_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/causal_graph.html#CausalGraph.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.causal_graph.CausalGraph.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize a CausalGraph object.</p>
+<p>Args:
+flai_dataset (flai.data.Data, optional): Dataset to be used for the network. Default is None.
+node_edge (list of tuples, optional): List of tuples where each tuple represents an edge of the network. Default is None.
+CPD (list of TabularCPD objects, optional): List of conditional probability distributions for the network. Default is None.
+indepence_test (bool, optional): If true, performs an independence test on the network. Default is True.
+root_node (str, optional): The root node of the network. Default is None.
+target (str, optional): The target node of the network. Default is None.
+verbose (int, optional): Verbosity level. Default is 0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.causal_graph.CausalGraph.calculate_cpd">
+<span class="sig-name descname"><span class="pre">calculate_cpd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/causal_graph.html#CausalGraph.calculate_cpd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.causal_graph.CausalGraph.calculate_cpd" title="Link to this definition"></a></dt>
+<dd><p>Calculate the Conditional Probability Distribution (CPD) for the network.</p>
+<p>Args:
+verbose (int, optional): Verbosity level. Default is 0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.causal_graph.CausalGraph.generate_dataset">
+<span class="sig-name descname"><span class="pre">generate_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methodtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bayes'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/causal_graph.html#CausalGraph.generate_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.causal_graph.CausalGraph.generate_dataset" title="Link to this definition"></a></dt>
+<dd><p>Generates a dataset based on the network.</p>
+<p>Args:
+n_samples (int, optional): Number of samples to generate. Default is 1000.
+methodtype (str, optional): The method type to be used for generation. Default is ‘bayes’.
+verbose (int, optional): Verbosity level. Default is 0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.causal_graph.CausalGraph.get_CPDs">
+<span class="sig-name descname"><span class="pre">get_CPDs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/causal_graph.html#CausalGraph.get_CPDs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.causal_graph.CausalGraph.get_CPDs" title="Link to this definition"></a></dt>
+<dd><p>Returns the Conditional Probability Distributions (CPDs) of the network.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.causal_graph.CausalGraph.independence_test">
+<span class="sig-name descname"><span class="pre">independence_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flai_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'chi_square'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prune</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/causal_graph.html#CausalGraph.independence_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.causal_graph.CausalGraph.independence_test" title="Link to this definition"></a></dt>
+<dd><p>Performs an independence test on the network.</p>
+<p>Args:
+flai_dataset (flai.data.Data): Dataset to be used for the independence test.
+test (str, optional): Type of test to be performed. Default is ‘chi_square’.
+prune (bool, optional): If true, prunes the network after the test. Default is True.
+verbose (int, optional): Verbosity level. Default is 0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.causal_graph.CausalGraph.inference">
+<span class="sig-name descname"><span class="pre">inference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/causal_graph.html#CausalGraph.inference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.causal_graph.CausalGraph.inference" title="Link to this definition"></a></dt>
+<dd><p>Performs inference on the network given evidence.</p>
+<p>Args:
+variables (list, optional): List of variables to be included in the inference. Default is an empty list.
+evidence (dict, optional): Dictionary of evidence in the form {variable: value}. Default is an empty dictionary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.causal_graph.CausalGraph.learn_cpd">
+<span class="sig-name descname"><span class="pre">learn_cpd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flai_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methodtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/causal_graph.html#CausalGraph.learn_cpd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.causal_graph.CausalGraph.learn_cpd" title="Link to this definition"></a></dt>
+<dd><p>Learn the Conditional Probability Distribution (CPD) for the network.</p>
+<p>Args:
+flai_dataset (flai.data.Data, optional): Dataset to be used for learning the CPD. Default is None.
+methodtype (str, optional): The method type to be used for learning. Default is None.
+verbose (int, optional): Verbosity level. Default is 0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.causal_graph.CausalGraph.mitigate_calculation_cpd">
+<span class="sig-name descname"><span class="pre">mitigate_calculation_cpd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensible_feature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fix_proportion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/causal_graph.html#CausalGraph.mitigate_calculation_cpd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.causal_graph.CausalGraph.mitigate_calculation_cpd" title="Link to this definition"></a></dt>
+<dd><p>Mitigates the calculation of the Conditional Probability Distribution (CPD) for certain features.</p>
+<p>Args:
+verbose (int, optional): Verbosity level. Default is 0.
+sensible_feature (list, optional): List of sensible features for which to mitigate the CPD calculation. Default is an empty list.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.causal_graph.CausalGraph.mitigate_edge_relation">
+<span class="sig-name descname"><span class="pre">mitigate_edge_relation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensible_feature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/causal_graph.html#CausalGraph.mitigate_edge_relation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.causal_graph.CausalGraph.mitigate_edge_relation" title="Link to this definition"></a></dt>
+<dd><p>Mitigates the relationship of certain edges in the network.</p>
+<p>Args:
+sensible_feature (list, optional): List of features for which to mitigate the relationship. Default is an empty list.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.causal_graph.CausalGraph.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/causal_graph.html#CausalGraph.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.causal_graph.CausalGraph.plot" title="Link to this definition"></a></dt>
+<dd><p>Plots the network.</p>
+<p>Args:
+directed (bool, optional): If True, plots a directed graph. Default is True.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.causal_graph.CausalGraph.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/causal_graph.html#CausalGraph.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.causal_graph.CausalGraph.predict" title="Link to this definition"></a></dt>
+<dd><p>Makes predictions based on the network.</p>
+<p>Args:
+data (DataFrame, optional): Data used for making predictions. Default is None.
+variables (list, optional): List of variables to be predicted. Default is an empty list.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="flai-data-module">
-<h2>FLAI.data module<a class="headerlink" href="#flai-data-module" title="Link to this heading"></a></h2>
+<section id="module-FLAI.data">
+<span id="flai-data-module"></span><h2>FLAI.data module<a class="headerlink" href="#module-FLAI.data" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="FLAI.data.Data">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">FLAI.data.</span></span><span class="sig-name descname"><span class="pre">Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/data.html#Data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.data.Data" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.data.Data.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/data.html#Data.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.data.Data.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the Data class.</p>
+<p>Args:
+data (DataFrame, optional): The data to be used. If None, an exception is raised. Default is None.
+transform (bool, optional): If True, the data is transformed to numerical form. Default is True.
+verbose (int, optional): Verbosity level. Default is 0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.data.Data.fairness_eqa_eqi">
+<span class="sig-name descname"><span class="pre">fairness_eqa_eqi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/data.html#Data.fairness_eqa_eqi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.data.Data.fairness_eqa_eqi" title="Link to this definition"></a></dt>
+<dd><p>Calculate fairness metrics for the data.</p>
+<p>Args:
+target_column (str, optional): The target column. If None, an exception is raised. Default is None.
+features (dict, optional): Dictionary with keys as column names as feature. Default is None.
+column_filter (dict, optional): Dictionary with keys as column names as sensible. Default is None.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.data.Data.fairness_metrics">
+<span class="sig-name descname"><span class="pre">fairness_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predicted_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns_fair</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/data.html#Data.fairness_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.data.Data.fairness_metrics" title="Link to this definition"></a></dt>
+<dd><p>Calculate fairness for a subgroup of population.</p>
+<p>Args:
+target_column (str, optional): The target column. If None, an exception is raised. Default is None.
+predicted_column (str, optional): The predicted column. If None, an exception is raised. Default is None.
+columns_fair (list, optional): List of column names to consider for fairness. Default is None.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.data.Data.get_df_metrics">
+<span class="sig-name descname"><span class="pre">get_df_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics_json</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/data.html#Data.get_df_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.data.Data.get_df_metrics" title="Link to this definition"></a></dt>
+<dd><p>Get the performance and fairness metrics as dataframes.</p>
+<p>Args:
+metrics_json (json, optional): The metrics in json format. If None, an exception is raised. Default is None.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.data.Data.metrics">
+<span class="sig-name descname"><span class="pre">metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predicted_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/data.html#Data.metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.data.Data.metrics" title="Link to this definition"></a></dt>
+<dd><p>Calculate various metrics for the prediction.</p>
+<p>Args:
+target_column (str, optional): The target column. If None, an exception is raised. Default is None.
+predicted_column (str, optional): The predicted column. If None, an exception is raised. Default is None.
+column_filter (dict, optional): Dictionary with keys as column names and values as filters. Default is None.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.data.Data.plot_fairness_eqa_eqi">
+<span class="sig-name descname"><span class="pre">plot_fairness_eqa_eqi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_aux_ideal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/data.html#Data.plot_fairness_eqa_eqi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.data.Data.plot_fairness_eqa_eqi" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.data.Data.theil_index">
+<span class="sig-name descname"><span class="pre">theil_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_pred</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/data.html#Data.theil_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.data.Data.theil_index" title="Link to this definition"></a></dt>
+<dd><p>Calculate the Theil index for the prediction.</p>
+<p>Args:
+y_true (array, optional): The true labels. If None, an exception is raised. Default is None.
+y_pred (array, optional): The predicted labels. If None, an exception is raised. Default is None.
+value_pred (int, optional): The value to predict. If None, an exception is raised. Default is None.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FLAI.data.Data.transform_data_numeric">
+<span class="sig-name descname"><span class="pre">transform_data_numeric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/data.html#Data.transform_data_numeric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.data.Data.transform_data_numeric" title="Link to this definition"></a></dt>
+<dd><p>Transform the data to numerical form.</p>
+<p>Args:
+verbose (int, optional): Verbosity level. Default is 0.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-FLAI">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-FLAI" title="Link to this heading"></a></h2>
