@@ -53,6 +53,12 @@ Python library developed by Rubén González during his phD. research. His missi
 ```bash
 pip install flai-causal
 ```
+
+python <= 3.9
+```bash
+pip install flai-causal==2.0.0
+```
+
 ## Features Fairnes Metric
 
 ### Single sensible feature
@@ -270,6 +276,7 @@ shap.plots.bar(shap_values_mitigated)
 * https://erdogant.github.io/bnlearn/
 * http://pgmpy.org
 ## Citation
+[Fairness Metric Paper Soon....]()
 
 [Mitigation Paper](https://www.sciencedirect.com/science/article/pii/S0167739X24000694)
 ```
