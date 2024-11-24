@@ -231,6 +231,16 @@ column_filter (dict, optional): Dictionary with keys as column names as sensible
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="FLAI.data.Data.fairness_eqa_eqi_old">
+<span class="sig-name descname"><span class="pre">fairness_eqa_eqi_old</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/data.html#Data.fairness_eqa_eqi_old"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.data.Data.fairness_eqa_eqi_old" title="Link to this definition"></a></dt>
+<dd><p>Calculate fairness metrics for the data.</p>
+<p>Args:
+target_column (str, optional): The target column. If None, an exception is raised. Default is None.
+features (dict, optional): Dictionary with keys as column names as feature. Default is None.
+column_filter (dict, optional): Dictionary with keys as column names as sensible. Default is None.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="FLAI.data.Data.fairness_metrics">
 <span class="sig-name descname"><span class="pre">fairness_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predicted_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns_fair</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FLAI/data.html#Data.fairness_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FLAI.data.Data.fairness_metrics" title="Link to this definition"></a></dt>
 <dd><p>Calculate fairness for a subgroup of population.</p>
