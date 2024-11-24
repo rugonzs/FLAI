@@ -185,7 +185,6 @@ class Data():
         n_group = combinations_s.shape[0]
         groups = [str(column_filter) + str(s) for s in combinations_s]
         combinations = [[s + f for s in combinations_s] for f in combinations_f]
-        start_time = time.time()
         df_aux = df_aux.reset_index().set_index(features)
         
         for cs,n in zip(combinations_s,range(n_group)):
@@ -198,8 +197,6 @@ class Data():
             df_aux_ideal = df_aux_ideal.set_index(features)
             df_aux_ideal['dx_'+str(n)] = [0] + (df_aux_ideal['count_'+str(n)].cumsum() / df_aux_ideal['count_'+str(n)].sum()).tolist()[:-1]
                 
-        stop_time = time.time()
-        print(stop_time - start_time)
         if plot:
             flai_dataset.plot_fairness_eqa_eqi(df_aux_ideal,n_group,groups)
         n_p = -1
