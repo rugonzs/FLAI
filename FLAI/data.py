@@ -5,7 +5,7 @@ from sklearn.preprocessing import OrdinalEncoder
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-plt.style.use("seaborn-dark-palette")
+#plt.style.use("seaborn-dark-palette")
 
 class Data():
     def __init__(self, data = None, transform = True, verbose = 0):
