@@ -2,7 +2,7 @@ name: docs
 on:
   push:
     branches:
-      - miss
+      - main
 permissions:
   contents: read
 jobs:
@@ -15,7 +15,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: '3.8'
+        python-version: '3.11.10'
 
     - name: Install requirements
       run: |
