@@ -276,8 +276,22 @@ shap.plots.bar(shap_values_mitigated)
 * https://erdogant.github.io/bnlearn/
 * http://pgmpy.org
 ## Citation
-[Fairness Metric Paper Soon....]()
-
+[Fairness Metric](https://www.sciencedirect.com/science/article/abs/pii/S0952197624021389?via%3Dihub)
+```
+@article{GONZALEZSENDINO2025109979,
+title = {Quantifying algorithmic discrimination: A two-dimensional approach to fairness in artificial intelligence},
+journal = {Engineering Applications of Artificial Intelligence},
+volume = {144},
+pages = {109979},
+year = {2025},
+issn = {0952-1976},
+doi = {https://doi.org/10.1016/j.engappai.2024.109979},
+url = {https://www.sciencedirect.com/science/article/pii/S0952197624021389},
+author = {Rubén González-Sendino and Emilio Serrano and Javier Bajo},
+keywords = {Fairness, Equity, Equality, Bias detection},
+abstract = {Fairness is a foundational pillar in the development of ethical and responsible artificial intelligence. One of the most pressing issues in this context is discrimination, which occurs when an algorithm displays unequal treatment towards data from different groups without an objective justification for such disparity. Artificial intelligence is increasingly taking on decision-making roles in society at large and in engineering fields in particular. In domains such as autonomous vehicle control systems, where unbiased decision-making can impact safety and trust, and in smart grid management, where equitable energy distribution is crucial, fairness must be a primary consideration. This study introduces a novel metric to measure fairness, consisting of a two-dimensional vector: Equality and Equity. When applied to benchmark datasets, this metric demonstrated superior informativeness by effectively distinguishing equality-related issues from equity-related challenges, surpassing traditional methods like Disparate Impact. Contributions of this work include (1) a pioneering metric for measuring equity; (2) a pure measure of fairness definition that takes into account equity and equality; (3) a vector to guide the mitigation algorithms; and, (4) a Fairness curve where the disparities between groups can be interpreted and explained.}
+}
+```
 [Mitigation Paper](https://www.sciencedirect.com/science/article/pii/S0167739X24000694)
 ```
 @article{GONZALEZSENDINO2024384,
