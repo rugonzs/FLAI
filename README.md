@@ -308,3 +308,22 @@ keywords = {Causal model, Bias mitigation, Fairness, Responsible artificial inte
 abstract = {In the evolving field of Artificial Intelligence, concerns have arisen about the opacity of certain models and their potential biases. This study aims to improve fairness and explainability in AI decision making. Existing bias mitigation strategies are classified as pre-training, training, and post-training approaches. This paper proposes a novel technique to create a mitigated bias dataset. This is achieved using a mitigated causal model that adjusts cause-and-effect relationships and probabilities within a Bayesian network. Contributions of this work include (1) the introduction of a novel mitigation training algorithm for causal model; (2) a pioneering pretraining methodology for producing a fair dataset for Artificial Intelligence model training; (3) the diligent maintenance of sensitive features in the dataset, ensuring that these vital attributes are not overlooked during analysis and model training; (4) the enhancement of explainability and transparency around biases; and finally (5) the development of an interactive demonstration that vividly displays experimental results and provides the code for facilitating replication of the work.}
 }
 ```
+[Systematic Review Paper](https://www.ijimai.org/journal/sites/default/files/2023-11/ip2023_11_001.pdf)
+```
+@article{3390,
+  keywords = {Bias, Fairness, Responsible Artificial Intelligence},
+  author = {Rubén González-Sendino and Emilio Serrano and Javier Bajo and Paulo Novais},
+  title = {A Review of Bias and Fairness in Artificial Intelligence},
+  abstract = {Automating decision systems has led to hidden biases in the use of artificial intelligence (AI). Consequently, explaining these decisions and identifying responsibilities has become a challenge. As a result, a new field of research on algorithmic fairness has emerged. In this area, detecting biases and mitigating them is essential to ensure fair and discrimination-free decisions. This paper contributes with: (1) a categorization of biases and how these are associated with different phases of an AI model’s development (including the data-generation phase); (2) a revision of fairness metrics to audit the data and AI models trained with them (considering agnostic models when focusing on fairness); and, (3) a novel taxonomy of the procedures to mitigate biases in the different phases of an AI model’s development (pre-processing, training, and post-processing) with the addition of transversal actions that help to produce fairer models.},
+  year = {2024},
+  journal = {International Journal of Interactive Multimedia and Artificial Intelligence},
+  volume = {9},
+  chapter = {5},
+  number = {1},
+  pages = {5-17},
+  month = {12/2024},
+  issn = {1989-1660},
+  url = {https://www.ijimai.org/journal/bibcite/reference/3390},
+  doi = {10.9781/ijimai.2023.11.001},
+}
+```
