@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FLAI — Fairness Learning in AI</title>
+  <meta name="description" content="Mitiga sesgos en IA con FLAI: métrica de Equidad/Igualdad, creación causal y mitigación. Demo en el navegador."/>
+
+  <link rel="canonical" href="https://rugonzs.github.io/FLAI/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="FLAI">
+  <meta property="og:title" content="FLAI — Fairness Learning in AI">
+  <meta property="og:description" content="Métrica 2D (Equidad + Igualdad), creación causal y mitigación de sesgos.">
+  <meta property="og:url" content="https://rugonzs.github.io/FLAI/">
+  <meta property="og:image" content="https://www.rubengonzalez.ai/assets/logo.png">
+  <meta property="og:image:alt" content="Retrato de Rubén González">
+  <meta property="og:locale" content="es_ES">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FLAI — Fairness Learning in AI">
+  <meta name="twitter:description" content="Métrica 2D (Equidad + Igualdad), creación causal y mitigación de sesgos.">
+  <meta name="twitter:image" content="https://www.rubengonzalez.ai/assets/logo.png">
+
+  <link rel="icon" type="image/png" href="https://www.rubengonzalez.ai/assets/logo.png" />
+  <meta name="theme-color" content="#0b0f17"/>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="brand">FLAI</div>
+      <nav class="nav">
+        <a href="./">Inicio</a>
+        <a href="./demo/">Probar demo</a>
+        <a href="./doc/">Docs</a>
+        <a href="https://github.com/rugonzs/FLAI">GitHub</a>
+        <a href="https://rubengonzalez.ai" rel="noopener">Quién soy</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <span class="badge">Nueva métrica 2D → Equidad + Igualdad</span>
+        <h1>Mitiga la discriminación en IA con <span class="highlight">FLAI</span></h1>
+        <p>Librería Python para <strong>detectar</strong> sesgos, <strong>construir</strong> un algoritmo causal y <strong>mitigar</strong> discriminaciones.</p>
+        <div class="cta-row">
+          <a class="btn" href="./demo/">Probar demo</a>
+          <a class="btn secondary" href="https://rubengonzalez.ai" rel="noopener">Quién soy</a>
+        </div>
+        <div class="kpis">
+          <div class="k"><div class="v">2D</div><div class="l">Métrica Fairness</div></div>
+          <div class="k"><div class="v">Causal</div><div class="l">Creación & mitigación</div></div>
+          <div class="k"><div class="v">Apache-2.0</div><div class="l">Open Source</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>¿Qué hace FLAI?</h3>
+        <ul class="list">
+          <li>💡 <strong>Detección</strong>: métrica bidimensional (Equidad/Igualdad) para auditar modelos.</li>
+          <li>📈 <strong>Creación</strong>: genera un grafo causal interpretable del problema.</li>
+          <li>🛡️ <strong>Mitigación</strong>: ajusta relaciones y tablas de probabilidad (en‑training) y genera <em>fair data</em> (pre‑training).</li>
+        </ul>
+        <p class="notice">Basado en el paper “Quantifying algorithmic discrimination: A two-dimensional approach to fairness in AI”.</p>
+      </div>
+    </section>
+
+    <footer>
+      © <span id="year"></span> FLAI — Apache-2.0. ·
+      <a href="./doc/">Docs</a> ·
+      <a href="https://github.com/rugonzs/FLAI">Código</a> ·
+      <a href="https://rubengonzalez.ai" rel="noopener">Quién soy</a>
+    </footer>
+  </div>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
