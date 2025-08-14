@@ -1,0 +1,39 @@
+:root{
+  --bg:#0b0f17;
+  --card:#121827;
+  --accent:#62d0ff;
+  --muted:#a9b2c7;
+  --text:#eef3ff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:1080px;margin:0 auto;padding:24px}
+.btn{display:inline-block;padding:12px 16px;border-radius:10px;background:var(--accent);color:#05121f;font-weight:700;border:0;cursor:pointer;box-shadow:0 10px 30px rgba(98,208,255,.25)}
+.btn.secondary{background:transparent;border:1px solid #2a354b;color:var(--text)}
+.hero{padding:64px 0 24px;display:grid;grid-template-columns:1.3fr 1fr;gap:28px;align-items:center}
+.hero h1{font-size:40px;line-height:1.1;margin:0 0 16px}
+.hero p{color:var(--muted);margin:0 0 24px;font-size:18px}
+.card{background:var(--card);border:1px solid #1c2435;border-radius:16px;padding:20px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.badge{display:inline-flex;gap:8px;align-items:center;background:#0f1729;border:1px solid #1f2a44;padding:6px 10px;border-radius:999px;color:#cdd6ea;font-size:12px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.kpis .k{padding:14px;border-radius:12px;background:#0f1726;border:1px solid #1a243a}
+.k .v{font-size:22px;font-weight:800}
+footer{padding:36px 0;color:#93a1bf}
+.nav{display:flex;gap:10px;flex-wrap:wrap}
+.section{margin:36px 0}
+.list{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+code.inline{background:#0e1527;border:1px solid #1a2340;padding:2px 6px;border-radius:6px}
+.header{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+.header .brand{font-weight:800;letter-spacing:.5px}
+.header nav a{margin-left:16px}
+pre{white-space:pre-wrap;word-wrap:break-word}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+@media (max-width: 920px){
+  .hero{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
+  .list{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr}
+}
