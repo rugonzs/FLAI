@@ -1,10 +1,4 @@
-:root{
-  --bg:#0b0f17;
-  --card:#121827;
-  --accent:#62d0ff;
-  --muted:#a9b2c7;
-  --text:#eef3ff;
-}
+:root{ --bg:#0b0f17; --card:#121827; --accent:#62d0ff; --muted:#a9b2c7; --text:#eef3ff; }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial}
 a{color:var(--accent);text-decoration:none}

@@ -6,9 +6,15 @@
   <title>FLAI — Demo en el navegador</title>
   <meta name="description" content="Demo ligera que calcula métricas de equidad/igualdad (proxies) en el navegador con PyScript/Pyodide."/>
   <link rel="stylesheet" href="../assets/styles.css" />
-  <!-- PyScript (pin a versión estable) -->
   <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
   <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="FLAI — Demo">
+  <meta property="og:description" content="Demo educativa con PyScript/Pyodide para explorar fairness (proxies).">
+  <meta property="og:url" content="https://rugonzs.github.io/FLAI/demo/">
+  <meta property="og:image" content="https://www.rubengonzalez.ai/assets/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
 <div class="container">
@@ -26,30 +32,13 @@
   <section class="section">
     <div class="card">
       <h2>Demo ligera (cliente) ⚗️</h2>
-      <p>
-        Sube un CSV o usa el ejemplo. Calcularemos <em>proxies didácticos</em> inspirados en FLAI:
-        <strong>Igualdad</strong> ≈ diferencia de paridad estadística (tasa positiva por grupo) y
-        <strong>Equidad</strong> ≈ diferencia de TPR (oportunidad igualada).
-      </p>
-      <p class="notice">
-        Para resultados científicos y la métrica 2D exacta usa la librería <code class="inline">flai-causal</code> en Python (servidor / local).
-      </p>
+      <p>Sube un CSV o usa el ejemplo. Calcularemos <em>proxies didácticos</em> inspirados en FLAI: <strong>Igualdad</strong> ≈ SPD y <strong>Equidad</strong> ≈ ΔTPR.</p>
+      <p class="notice">Para la métrica 2D exacta usa <code class="inline">flai-causal</code> en Python.</p>
     </div>
   </section>
 
   <section class="section card">
     <h3>1) Datos</h3>
-    <details>
-      <summary>Formato esperado</summary>
-      <pre>
-Columnas mínimas:
-- group  (string/int)  → grupo sensible (p.ej. 0/1, F/M, etc.)
-- y_true (0/1)         → etiqueta real
-- y_pred (0/1)         → predicción (o usa score y umbral)
-Opcional:
-- score (0..1)         → probabilidad / score
-      </pre>
-    </details>
     <div class="nav">
       <input id="file" type="file" accept=".csv" />
       <button id="load-example" class="btn secondary">Cargar ejemplo</button>
@@ -68,15 +57,13 @@ Opcional:
     <div id="results"></div>
   </section>
 
-  <footer>
-    © <span id="year"></span> FLAI — Demo educativa con PyScript/Pyodide.
-  </footer>
+  <footer>© <span id="year"></span> FLAI — Demo educativa con PyScript/Pyodide.</footer>
 </div>
 
 <script type="py" config='{"packages": ["pandas"]}'>
 from pyscript import display
 import pandas as pd
-import io, js
+import io, js, numpy as np, random
 
 state = {"df": None}
 
@@ -87,10 +74,9 @@ def parse_csv(text):
 
 def compute_metrics(df, threshold=0.5):
     df = df.copy()
-    cols = df.columns.tolist()
-    if "y_pred" not in cols and "score" in cols:
+    if "y_pred" not in df.columns and "score" in df.columns:
         df["y_pred"] = (df["score"] >= threshold).astype(int)
-    assert {"group","y_true","y_pred"}.issubset(df.columns), "Faltan columnas requeridas"
+    assert { "group","y_true","y_pred" }.issubset(df.columns), "Faltan columnas requeridas"
     groups = list(df["group"].astype(str).unique())
     if len(groups) != 2:
         raise ValueError("Esta demo admite 2 grupos para simplificar (en tus datos hay %d)" % len(groups))
@@ -107,64 +93,39 @@ def compute_metrics(df, threshold=0.5):
     spd = rate_pos(g1) - rate_pos(g0)
     eod = tpr(g1) - tpr(g0)
     di  = (rate_pos(g0)+1e-12)/(rate_pos(g1)+1e-12)
-    out = {
-        "grupos":[g0,g1],
-        "paridad_positiva":[rate_pos(g0), rate_pos(g1)],
-        "tpr":[tpr(g0), tpr(g1)],
-        "fpr":[fpr(g0), fpr(g1)],
-        "SPD (g1 - g0)": spd,
-        "EOD (g1 - g0)": eod,
-        "DI (g0/g1)": di
-    }
+    out = {{ "grupos":[g0,g1], "paridad_positiva":[rate_pos(g0), rate_pos(g1)], "tpr":[tpr(g0), tpr(g1)], "fpr":[fpr(g0), fpr(g1)], "SPD (g1 - g0)": spd, "EOD (g1 - g0)": eod, "DI (g0/g1)": di }}
     return out
 
-def format_pct(x):
-    return "—" if pd.isna(x) else f"{x*100:.1f}%"
+def format_pct(x): return "—" if pd.isna(x) else f"{{x*100:.1f}}%"
 
 def render(out):
     g0, g1 = out["grupos"]
     html = f'''
     <div class="grid">
-      <div>
-        <h4>Paridad estadística</h4>
-        <p><strong>{g0}</strong>: {format_pct(out["paridad_positiva"][0])}<br>
-           <strong>{g1}</strong>: {format_pct(out["paridad_positiva"][1])}</p>
-      </div>
-      <div>
-        <h4>TPR (oportunidad)</h4>
-        <p><strong>{g0}</strong>: {format_pct(out["tpr"][0])}<br>
-           <strong>{g1}</strong>: {format_pct(out["tpr"][1])}</p>
-      </div>
-      <div>
-        <h4>FPR</h4>
-        <p><strong>{g0}</strong>: {format_pct(out["fpr"][0])}<br>
-           <strong>{g1}</strong>: {format_pct(out["fpr"][1])}</p>
-      </div>
+      <div><h4>Paridad estadística</h4><p><strong>{{g0}}</strong>: {{format_pct(out["paridad_positiva"][0])}}<br><strong>{{g1}}</strong>: {{format_pct(out["paridad_positiva"][1])}}</p></div>
+      <div><h4>TPR (oportunidad)</h4><p><strong>{{g0}}</strong>: {{format_pct(out["tpr"][0])}}<br><strong>{{g1}}</strong>: {{format_pct(out["tpr"][1])}}</p></div>
+      <div><h4>FPR</h4><p><strong>{{g0}}</strong>: {{format_pct(out["fpr"][0])}}<br><strong>{{g1}}</strong>: {{format_pct(out["fpr"][1])}}</p></div>
     </div>
     <div class="section">
       <div class="kpis">
-        <div class="k"><div class="v">{out["SPD (g1 - g0)"]:+.3f}</div><div class="l">Igualdad ≈ SPD</div></div>
-        <div class="k"><div class="v">{out["EOD (g1 - g0)"]:+.3f}</div><div class="l">Equidad ≈ ΔTPR</div></div>
-        <div class="k"><div class="v">{out["DI (g0/g1)"]:.3f}</div><div class="l">Disparate Impact</div></div>
+        <div class="k"><div class="v">{{out["SPD (g1 - g0)"]:+.3f}}</div><div class="l">Igualdad ≈ SPD</div></div>
+        <div class="k"><div class="v">{{out["EOD (g1 - g0)"]:+.3f}}</div><div class="l">Equidad ≈ ΔTPR</div></div>
+        <div class="k"><div class="v">{{out["DI (g0/g1)"]:.3f}}</div><div class="l">Disparate Impact</div></div>
       </div>
     </div>
-    <p class="notice">
-      *Esta demo es pedagógica (cliente). Para la métrica 2D exacta usa <code class="inline">flai-causal</code>.
-    </p>
+    <p class="notice">*Esta demo es pedagógica (cliente). Para la métrica 2D exacta usa <code class="inline">flai-causal</code>.</p>
     '''
     display(html, target="results")
 
 def load_example():
-    import numpy as np, random
     random.seed(42); np.random.seed(42)
     n=200
     group = np.random.choice(["A","B"], size=n, p=[0.5,0.5])
     y_true = (np.random.rand(n) < (0.5 + 0.1*(group=="B"))).astype(int)
     score  = np.clip(0.3 + 0.5*y_true + 0.15*(group=="B") + np.random.randn(n)*0.2, 0, 1)
-    df = pd.DataFrame({"group":group,"y_true":y_true,"score":score})
+    df = pd.DataFrame({{"group":group,"y_true":y_true,"score":score}})
     state["df"] = df
     display(df.head().to_html(index=False), target="table-preview")
-    import js
     th = float(js.document.getElementById("threshold").value)
     out = compute_metrics(df, threshold=th)
     render(out)
@@ -172,20 +133,16 @@ def load_example():
 def on_file(text):
     df = parse_csv(text); state["df"] = df
     display(df.head().to_html(index=False), target="table-preview")
-    import js
     th = float(js.document.getElementById("threshold").value)
     out = compute_metrics(df, threshold=th)
     render(out)
 
 def on_threshold():
-    if state["df"] is None: 
-        return
-    import js
+    if state["df"] is None: return
     th = float(js.document.getElementById("threshold").value)
     out = compute_metrics(state["df"], threshold=th)
     render(out)
 
-import js
 js.window.py_load_example = load_example
 js.window.py_on_file = on_file
 js.window.py_on_threshold = on_threshold
@@ -198,16 +155,8 @@ js.window.py_on_threshold = on_threshold
   const thv = document.getElementById('thv');
   document.getElementById('year').textContent = new Date().getFullYear();
   loadBtn.addEventListener('click', () => window.py_load_example());
-  file.addEventListener('change', async (e) => {
-    const f = e.target.files[0];
-    if(!f) return;
-    const text = await f.text();
-    window.py_on_file(text);
-  });
-  th.addEventListener('input', () => {
-    thv.textContent = Number(th.value).toFixed(2);
-    window.py_on_threshold();
-  });
+  file.addEventListener('change', async (e) => {{ const f = e.target.files[0]; if(!f) return; const text = await f.text(); window.py_on_file(text); }});
+  th.addEventListener('input', () => {{ thv.textContent = Number(th.value).toFixed(2); window.py_on_threshold(); }});
 </script>
 </body>
 </html>
