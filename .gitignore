@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Claude Code files
+.claude/
+CLAUDE.md

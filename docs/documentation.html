@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FLAI — Documentación Completa | API y Guías</title>
+  <meta name="description" content="Documentación completa de FLAI: API reference, guías de uso, ejemplos y tutoriales para detectar y mitigar sesgos algorítmicos."/>
+  <link rel="stylesheet" href="./assets/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      position: sticky;
+      top: 100px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    
+    .toc ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .toc li {
+      margin: 8px 0;
+    }
+    
+    .toc a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+    
+    .toc a:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+    
+    .content-grid {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 40px;
+      margin-top: 40px;
+    }
+    
+    .api-section {
+      margin: 48px 0;
+      padding: 32px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      position: relative;
+    }
+    
+    .api-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-hero);
+      border-radius: 16px 16px 0 0;
+    }
+    
+    .method-signature {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+    }
+    
+    .parameters {
+      margin: 16px 0;
+    }
+    
+    .parameter {
+      margin: 12px 0;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+    }
+    
+    .parameter-name {
+      font-weight: 700;
+      color: var(--accent);
+      font-family: monospace;
+    }
+    
+    .parameter-type {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+    
+    .example-code {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      overflow-x: auto;
+      position: relative;
+    }
+    
+    .example-code::before {
+      content: '💻 Ejemplo';
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      background: var(--accent);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    
+    .returns {
+      background: var(--gold-light);
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    
+    .returns h4 {
+      color: var(--gold);
+      margin: 0 0 8px 0;
+    }
+    
+    @media (max-width: 1024px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .toc {
+        position: static;
+        max-height: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="brand">🔬 FLAI</div>
+      <nav class="nav">
+        <a href="./">🏠 Inicio</a>
+        <a href="./demo/">📊 Demo</a>
+        <a href="./documentation.html">📖 Docs</a>
+        <a href="https://github.com/rugonzs/FLAI" target="_blank">GitHub</a>
+        <a href="https://pypi.org/project/flai-causal/" target="_blank">PyPI</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="badge">📚 Documentación Completa</div>
+        <h1>Guía Técnica de FLAI</h1>
+        <p>Referencia completa de la API, guías de instalación, tutoriales paso a paso y mejores prácticas para implementar fairness en tus modelos de IA.</p>
+      </div>
+    </section>
+
+    <div class="content-grid">
+      <aside class="toc">
+        <h3>📋 Índice</h3>
+        <ul>
+          <li><a href="#instalacion">🚀 Instalación</a></li>
+          <li><a href="#inicio-rapido">⚡ Inicio Rápido</a></li>
+          <li><a href="#data-class">📊 Clase Data</a>
+            <ul>
+              <li><a href="#data-init">Constructor</a></li>
+              <li><a href="#fairness-eqa-eqi">fairness_eqa_eqi()</a></li>
+              <li><a href="#fairness-metrics">fairness_metrics()</a></li>
+            </ul>
+          </li>
+          <li><a href="#causal-graph-class">🧠 Clase CausalGraph</a>
+            <ul>
+              <li><a href="#causal-init">Constructor</a></li>
+              <li><a href="#mitigate-edge">mitigate_edge_relation()</a></li>
+              <li><a href="#mitigate-cpd">mitigate_calculation_cpd()</a></li>
+              <li><a href="#generate-dataset">generate_dataset()</a></li>
+              <li><a href="#inference">inference()</a></li>
+            </ul>
+          </li>
+          <li><a href="#ejemplos">📚 Ejemplos Completos</a></li>
+          <li><a href="#mejores-practicas">✨ Mejores Prácticas</a></li>
+        </ul>
+      </aside>
+
+      <main>
+        <section id="instalacion" class="api-section">
+          <h2>🚀 Instalación</h2>
+          
+          <h3>Requisitos del Sistema</h3>
+          <ul>
+            <li><strong>Python:</strong> >= 3.9 (recomendado 3.10+)</li>
+            <li><strong>Memoria:</strong> Mínimo 4GB RAM</li>
+            <li><strong>Espacio:</strong> ~500MB para dependencias</li>
+          </ul>
+
+          <h3>Instalación desde PyPI</h3>
+          <div class="example-code">
+            <pre><code># Versión más reciente (Python >= 3.9)
+pip install flai-causal
+
+# Para Python <= 3.9
+pip install flai-causal==2.0.0
+
+# Con dependencias opcionales para visualización
+pip install flai-causal[viz]</code></pre>
+          </div>
+
+          <h3>Instalación desde GitHub</h3>
+          <div class="example-code">
+            <pre><code># Versión de desarrollo
+pip install git+https://github.com/rugonzs/FLAI.git
+
+# Versión específica
+pip install git+https://github.com/rugonzs/FLAI.git@v3.0.4</code></pre>
+          </div>
+
+          <h3>Verificación de Instalación</h3>
+          <div class="example-code">
+            <pre><code>import FLAI
+from FLAI import data, causal_graph
+print(f"FLAI instalado correctamente. Versión disponible.")</code></pre>
+          </div>
+        </section>
+
+        <section id="inicio-rapido" class="api-section">
+          <h2>⚡ Inicio Rápido</h2>
+          
+          <p>Ejemplo completo en 5 minutos para detectar y mitigar sesgos:</p>
+
+          <div class="example-code">
+            <pre><code>import pandas as pd
+from FLAI import data, causal_graph
+
+# 1. Cargar y preparar datos
+df = pd.read_csv('tu_dataset.csv')  # O usar pickle, parquet, etc.
+flai_dataset = data.Data(df, transform=True)
+
+# 2. Detectar sesgos con métrica bidimensional
+df_fairness, datos_detalle = flai_dataset.fairness_eqa_eqi(
+    features=['education', 'age'],      # Variables explicativas
+    target_column='income',             # Variable objetivo
+    column_filter=['gender'],           # Variable sensible
+    plot=True                          # Visualizar resultados
+)
+
+print("📊 Métricas de Fairness:")
+print(df_fairness)
+
+# 3. Crear modelo causal
+flai_graph = causal_graph.CausalGraph(
+    flai_dataset, 
+    target='income'
+)
+
+# 4. Mitigar sesgos
+flai_graph.mitigate_edge_relation(sensible_feature=['gender'])
+flai_graph.mitigate_calculation_cpd(sensible_feature=['gender'])
+
+# 5. Generar datos justos
+fair_data = flai_graph.generate_dataset(
+    n_samples=1000, 
+    methodtype='bayes'
+)
+
+# 6. Verificar mejora
+df_fairness_new, _ = fair_data.fairness_eqa_eqi(
+    features=['education', 'age'],
+    target_column='income',
+    column_filter=['gender'],
+    plot=True
+)
+
+print("✅ Después de mitigación:")
+print(df_fairness_new)</code></pre>
+          </div>
+        </section>
+
+        <section id="data-class" class="api-section">
+          <h2>📊 Clase Data</h2>
+          
+          <p>La clase <code>Data</code> es el punto de entrada principal para el análisis de fairness. Encapsula un dataset y proporciona métodos para detectar y medir sesgos.</p>
+
+          <div id="data-init">
+            <h3>Constructor</h3>
+            <div class="method-signature">
+              <code>Data(data=None, transform=True, verbose=0)</code>
+            </div>
+
+            <div class="parameters">
+              <div class="parameter">
+                <div class="parameter-name">data</div>
+                <div class="parameter-type">pandas.DataFrame, required</div>
+                <p>Dataset a analizar. Debe contener variables categóricas y numéricas.</p>
+              </div>
+              
+              <div class="parameter">
+                <div class="parameter-name">transform</div>
+                <div class="parameter-type">bool, default=True</div>
+                <p>Si True, transforma automáticamente variables categóricas a numéricas usando OrdinalEncoder.</p>
+              </div>
+              
+              <div class="parameter">
+                <div class="parameter-name">verbose</div>
+                <div class="parameter-type">int, default=0</div>
+                <p>Nivel de verbosidad (0=silencioso, 1=básico, 2=detallado).</p>
+              </div>
+            </div>
+
+            <div class="example-code">
+              <pre><code># Cargar datos con transformación automática
+import pandas as pd
+from FLAI import data
+
+df = pd.read_csv('adult.csv')
+flai_dataset = data.Data(df, transform=True, verbose=1)
+
+# Acceder a datos transformados
+print(flai_dataset.data.head())
+print(f"Forma del dataset: {flai_dataset.data.shape}")
+
+# Ver mapeo de categorías originales
+print("Mapeo de categorías:", flai_dataset.map_cat)</code></pre>
+            </div>
+          </div>
+
+          <div id="fairness-eqa-eqi">
+            <h3>fairness_eqa_eqi()</h3>
+            <p>🏆 <strong>Método principal:</strong> Calcula la métrica bidimensional EQA-EQI que distingue igualdad de equidad.</p>
+            
+            <div class="method-signature">
+              <code>fairness_eqa_eqi(features, target_column, column_filter, plot=True)</code>
+            </div>
+
+            <div class="parameters">
+              <div class="parameter">
+                <div class="parameter-name">features</div>
+                <div class="parameter-type">list of str, required</div>
+                <p>Lista de columnas que representan características no sensibles (ej: ['education', 'age']).</p>
+              </div>
+              
+              <div class="parameter">
+                <div class="parameter-name">target_column</div>
+                <div class="parameter-type">str, required</div>
+                <p>Nombre de la columna objetivo/predicción a analizar.</p>
+              </div>
+              
+              <div class="parameter">
+                <div class="parameter-name">column_filter</div>
+                <div class="parameter-type">list of str, required</div>
+                <p>Lista de columnas sensibles para análisis de fairness (ej: ['gender', 'race']).</p>
+              </div>
+              
+              <div class="parameter">
+                <div class="parameter-name">plot</div>
+                <div class="parameter-type">bool, default=True</div>
+                <p>Si True, genera visualizaciones automáticas de las métricas.</p>
+              </div>
+            </div>
+
+            <div class="returns">
+              <h4>🔄 Retorna</h4>
+              <p><strong>tuple:</strong> (df_fairness, datos_detalle)</p>
+              <ul>
+                <li><strong>df_fairness:</strong> DataFrame con métricas EQI, EQA y F para cada grupo</li>
+                <li><strong>datos_detalle:</strong> DataFrame con análisis detallado por grupo y característica</li>
+              </ul>
+            </div>
+
+            <div class="example-code">
+              <pre><code># Ejemplo: Análisis de fairness por género
+df_f, datos_f = flai_dataset.fairness_eqa_eqi(
+    features=['education'],           # Variable explicativa
+    target_column='income_high',      # Variable a predecir
+    column_filter=['gender'],         # Variable sensible
+    plot=True                        # Mostrar gráficos
+)
+
+print("📊 Resultados:")
+print(df_f)
+# Salida esperada:
+#        group     reference   EQI    EQA     F
+# 0  gender_0     gender_1   -0.04  0.08  0.09
+
+# Interpretación:
+# EQI = -0.04: Diferencia en oportunidades (negativo = grupo 0 desfavorecido)
+# EQA = 0.08:  Diferencia en resultados generales  
+# F = 0.09:    Unfairness global = √(EQA² + EQI²)</code></pre>
+            </div>
+          </div>
+
+          <div id="fairness-metrics">
+            <h3>fairness_metrics()</h3>
+            <p>Calcula métricas tradicionales de fairness para comparación con EQA-EQI.</p>
+            
+            <div class="method-signature">
+              <code>fairness_metrics(target_column, predicted_column, columns_fair)</code>
+            </div>
+
+            <div class="parameters">
+              <div class="parameter">
+                <div class="parameter-name">target_column</div>
+                <div class="parameter-type">str, required</div>
+                <p>Columna con etiquetas verdaderas (ground truth).</p>
+              </div>
+              
+              <div class="parameter">
+                <div class="parameter-name">predicted_column</div>
+                <div class="parameter-type">str, required</div>
+                <p>Columna con predicciones del modelo.</p>
+              </div>
+              
+              <div class="parameter">
+                <div class="parameter-name">columns_fair</div>
+                <div class="parameter-type">dict, required</div>
+                <p>Diccionario especificando grupos privilegiados/no privilegiados.</p>
+              </div>
+            </div>
+
+            <div class="example-code">
+              <pre><code># Métricas tradicionales para comparar
+metrics = flai_dataset.fairness_metrics(
+    target_column='true_label',
+    predicted_column='predicted_label', 
+    columns_fair={
+        'gender': {'privileged': 1, 'unprivileged': 0},
+        'age': {'privileged': 1, 'unprivileged': 0}
+    }
+)
+
+# Obtener DataFrames organizados
+df_performance, df_fairness = flai_dataset.get_df_metrics(metrics)
+
+print("🎯 Métricas de Performance:")
+print(df_performance[['ACC', 'TPR', 'FPR', 'PPP']])
+
+print("⚖️ Métricas de Fairness:")
+print(df_fairness[['EOD', 'DI', 'SPD', 'OD']])</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="causal-graph-class" class="api-section">
+          <h2>🧠 Clase CausalGraph</h2>
+          
+          <p>La clase <code>CausalGraph</code> implementa redes bayesianas causales para modelar y mitigar sesgos algorítmicos.</p>
+
+          <div id="causal-init">
+            <h3>Constructor</h3>
+            <div class="method-signature">
+              <code>CausalGraph(flai_dataset, node_edge=None, CPD=None, indepence_test=True, root_node=None, target=None, verbose=0)</code>
+            </div>
+
+            <div class="parameters">
+              <div class="parameter">
+                <div class="parameter-name">flai_dataset</div>
+                <div class="parameter-type">FLAI.data.Data, required</div>
+                <p>Instancia de la clase Data con el dataset a modelar.</p>
+              </div>
+              
+              <div class="parameter">
+                <div class="parameter-name">target</div>
+                <div class="parameter-type">str, required</div>
+                <p>Variable objetivo del modelo causal.</p>
+              </div>
+              
+              <div class="parameter">
+                <div class="parameter-name">node_edge</div>
+                <div class="parameter-type">list of tuples, optional</div>
+                <p>Lista de aristas para construir el grafo manualmente. Si None, se aprende automáticamente.</p>
+              </div>
+              
+              <div class="parameter">
+                <div class="parameter-name">indepence_test</div>
+                <div class="parameter-type">bool, default=True</div>
+                <p>Si True, aplica test de independencia para validar aristas.</p>
+              </div>
+            </div>
+
+            <div class="example-code">
+              <pre><code># Construcción automática del grafo
+flai_graph = causal_graph.CausalGraph(
+    flai_dataset=flai_dataset,
+    target='income',
+    verbose=1
+)
+
+# Visualizar el grafo
+flai_graph.plot(directed=True)
+
+# Ver las aristas aprendidas
+print("🔗 Aristas del grafo:", flai_graph.graph['model_edges'])
+
+# Construcción manual del grafo
+manual_edges = [
+    ('age', 'income'),
+    ('education', 'income'),
+    ('gender', 'education'),
+    ('gender', 'income')
+]
+
+flai_graph_manual = causal_graph.CausalGraph(
+    flai_dataset=flai_dataset,
+    node_edge=manual_edges,
+    target='income'
+)</code></pre>
+            </div>
+          </div>
+
+          <div id="mitigate-edge">
+            <h3>mitigate_edge_relation()</h3>
+            <p>🛠️ <strong>Mitigación estructural:</strong> Modifica las relaciones causales para eliminar conexiones discriminatorias.</p>
+            
+            <div class="method-signature">
+              <code>mitigate_edge_relation(sensible_feature)</code>
+            </div>
+
+            <div class="parameters">
+              <div class="parameter">
+                <div class="parameter-name">sensible_feature</div>
+                <div class="parameter-type">list of str, required</div>
+                <p>Lista de variables sensibles cuyas relaciones causales se van a mitigar.</p>
+              </div>
+            </div>
+
+            <div class="returns">
+              <h4>🔄 Retorna</h4>
+              <p><strong>list:</strong> Lista de aristas del grafo mitigado</p>
+            </div>
+
+            <div class="example-code">
+              <pre><code># Antes de la mitigación
+print("📊 Aristas originales:")
+print(flai_graph.graph['model_edges'])
+
+# Mitigar relaciones de variables sensibles
+mitigated_edges = flai_graph.mitigate_edge_relation(
+    sensible_feature=['gender', 'age']
+)
+
+print("✅ Aristas después de mitigación:")
+print(mitigated_edges)
+
+# Visualizar cambios
+flai_graph.plot(directed=True)
+
+# Ejemplo de transformación:
+# Antes: [('gender', 'income'), ('age', 'income'), ('education', 'income')]
+# Después: [('education', 'income'), ('gender', 'education'), ('age', 'education')]
+# Las variables sensibles ya no afectan directamente al resultado</code></pre>
+            </div>
+          </div>
+
+          <div id="mitigate-cpd">
+            <h3>mitigate_calculation_cpd()</h3>
+            <p>📊 <strong>Mitigación probabilística:</strong> Ajusta las tablas de probabilidad condicional para reducir sesgos.</p>
+            
+            <div class="method-signature">
+              <code>mitigate_calculation_cpd(sensible_feature, fix_proportion=True, verbose=0)</code>
+            </div>
+
+            <div class="parameters">
+              <div class="parameter">
+                <div class="parameter-name">sensible_feature</div>
+                <div class="parameter-type">list of str, required</div>
+                <p>Variables sensibles cuyas distribuciones se van a ajustar.</p>
+              </div>
+              
+              <div class="parameter">
+                <div class="parameter-name">fix_proportion</div>
+                <div class="parameter-type">bool, default=True</div>
+                <p>Si True, iguala las proporciones de variables sensibles.</p>
+              </div>
+            </div>
+
+            <div class="example-code">
+              <pre><code># Aplicar mitigación probabilística
+flai_graph.mitigate_calculation_cpd(
+    sensible_feature=['gender', 'age'],
+    fix_proportion=True,
+    verbose=1
+)
+
+# Comparar probabilidades antes y después
+print("📊 Inferencia antes de mitigación:")
+original_inference = flai_graph.inference(
+    variables=['gender', 'income'], 
+    evidence={}
+)
+print(original_inference)
+
+print("✅ Inferencia después de mitigación:")
+# Ahora las probabilidades son iguales independientemente del género</code></pre>
+            </div>
+          </div>
+
+          <div id="generate-dataset">
+            <h3>generate_dataset()</h3>
+            <p>🔄 <strong>Generación de datos justos:</strong> Crea datasets sintéticos libres de sesgo usando el modelo mitigado.</p>
+            
+            <div class="method-signature">
+              <code>generate_dataset(n_samples=1000, methodtype='bayes', verbose=0)</code>
+            </div>
+
+            <div class="parameters">
+              <div class="parameter">
+                <div class="parameter-name">n_samples</div>
+                <div class="parameter-type">int, default=1000</div>
+                <p>Número de muestras a generar.</p>
+              </div>
+              
+              <div class="parameter">
+                <div class="parameter-name">methodtype</div>
+                <div class="parameter-type">str, default='bayes'</div>
+                <p>Método de muestreo ('bayes', 'rejection', etc.).</p>
+              </div>
+            </div>
+
+            <div class="returns">
+              <h4>🔄 Retorna</h4>
+              <p><strong>FLAI.data.Data:</strong> Nueva instancia con datos sintéticos justos</p>
+            </div>
+
+            <div class="example-code">
+              <pre><code># Generar datos justos
+fair_data = flai_graph.generate_dataset(
+    n_samples=5000,
+    methodtype='bayes',
+    verbose=1
+)
+
+print(f"📈 Dataset justo generado: {fair_data.data.shape}")
+print(fair_data.data.head())
+
+# Verificar que el sesgo se ha eliminado
+df_fair, _ = fair_data.fairness_eqa_eqi(
+    features=['education'],
+    target_column='income',
+    column_filter=['gender'],
+    plot=True
+)
+
+print("✅ Métricas en datos justos:")
+print(df_fair)
+# Esperado: EQI ≈ 0, EQA ≈ 0, F ≈ 0
+
+# Usar para entrenar nuevos modelos
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+X = fair_data.data.drop('income', axis=1)
+y = fair_data.data['income']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+model = RandomForestClassifier()
+model.fit(X_train, y_train)</code></pre>
+            </div>
+          </div>
+
+          <div id="inference">
+            <h3>inference()</h3>
+            <p>🔮 Realiza inferencia bayesiana en el modelo causal.</p>
+            
+            <div class="method-signature">
+              <code>inference(variables, evidence={}, verbose=0)</code>
+            </div>
+
+            <div class="example-code">
+              <pre><code># Inferencia simple
+result = flai_graph.inference(
+    variables=['gender', 'income'],
+    evidence={}
+)
+print("🔮 Probabilidades conjuntas:")
+print(result)
+
+# Inferencia condicional
+result_conditional = flai_graph.inference(
+    variables=['income'],
+    evidence={'gender': 1, 'education': 3}
+)
+print("🎯 P(income | gender=1, education=3):")
+print(result_conditional)</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="ejemplos" class="api-section">
+          <h2>📚 Ejemplos Completos</h2>
+
+          <h3>🎯 Caso 1: Dataset Adult (Census Income)</h3>
+          <div class="example-code">
+            <pre><code># Pipeline completo para dataset Adult
+import pandas as pd
+from FLAI import data, causal_graph
+import matplotlib.pyplot as plt
+
+# 1. Cargar datos
+df = pd.read_csv('adult.csv')
+print(f"📊 Dataset cargado: {df.shape}")
+
+# 2. Preparar con FLAI
+flai_dataset = data.Data(df, transform=True)
+
+# 3. Análisis inicial de fairness
+print("🔍 Análisis inicial de sesgos...")
+df_original, _ = flai_dataset.fairness_eqa_eqi(
+    features=['education-num', 'age'],
+    target_column='income',
+    column_filter=['sex'],
+    plot=True
+)
+print("📈 Fairness original:")
+print(df_original)
+
+# 4. Construir modelo causal
+flai_graph = causal_graph.CausalGraph(
+    flai_dataset, 
+    target='income',
+    verbose=1
+)
+
+# 5. Aplicar mitigación completa
+print("🛠️ Aplicando mitigación...")
+flai_graph.mitigate_edge_relation(sensible_feature=['sex', 'age'])
+flai_graph.mitigate_calculation_cpd(sensible_feature=['sex', 'age'])
+
+# 6. Generar datos justos
+fair_data = flai_graph.generate_dataset(n_samples=2000)
+
+# 7. Verificar mejora
+df_mitigated, _ = fair_data.fairness_eqa_eqi(
+    features=['education-num', 'age'],
+    target_column='income',
+    column_filter=['sex'],
+    plot=True
+)
+print("✅ Fairness después de mitigación:")
+print(df_mitigated)
+
+# 8. Comparación visual
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+# Plot original
+original_values = df_original[['EQI', 'EQA', 'F']].values[0]
+ax1.bar(['EQI', 'EQA', 'F'], original_values, color=['red', 'orange', 'darkred'])
+ax1.set_title('Original Dataset')
+ax1.set_ylabel('Unfairness Score')
+
+# Plot mitigated  
+mitigated_values = df_mitigated[['EQI', 'EQA', 'F']].values[0]
+ax2.bar(['EQI', 'EQA', 'F'], mitigated_values, color=['green', 'lightgreen', 'darkgreen'])
+ax2.set_title('After FLAI Mitigation')
+ax2.set_ylabel('Unfairness Score')
+
+plt.tight_layout()
+plt.show()
+
+print(f"🎯 Mejora en Fairness Global: {original_values[2]:.3f} → {mitigated_values[2]:.3f}")</code></pre>
+          </div>
+
+          <h3>⚖️ Caso 2: Dataset COMPAS (Recidivism)</h3>
+          <div class="example-code">
+            <pre><code># Análisis de algoritmos de justicia penal
+import pandas as pd
+from FLAI import data, causal_graph
+
+# Cargar datos COMPAS
+df_compas = pd.read_csv('compas-scores.csv')
+
+# Preparar datos
+flai_compas = data.Data(df_compas, transform=True)
+
+# Análisis específico por raza
+df_racial_bias, _ = flai_compas.fairness_eqa_eqi(
+    features=['priors_count', 'age'],
+    target_column='two_year_recid',
+    column_filter=['race'],
+    plot=True
+)
+
+print("⚖️ Sesgo racial en COMPAS:")
+print(df_racial_bias)
+
+# Construir modelo específico para justicia
+compas_graph = causal_graph.CausalGraph(
+    flai_compas,
+    target='two_year_recid',
+    verbose=1
+)
+
+# Mitigación enfocada en raza
+compas_graph.mitigate_edge_relation(sensible_feature=['race'])
+compas_graph.mitigate_calculation_cpd(sensible_feature=['race'])
+
+# Evaluar impacto
+fair_compas = compas_graph.generate_dataset(n_samples=1000)
+df_compas_fair, _ = fair_compas.fairness_eqa_eqi(
+    features=['priors_count', 'age'],
+    target_column='two_year_recid', 
+    column_filter=['race'],
+    plot=True
+)
+
+print("✅ COMPAS después de mitigación:")
+print(df_compas_fair)</code></pre>
+          </div>
+        </section>
+
+        <section id="mejores-practicas" class="api-section">
+          <h2>✨ Mejores Prácticas</h2>
+
+          <h3>🎯 Preparación de Datos</h3>
+          <ul>
+            <li><strong>Limpieza previa:</strong> Elimina valores faltantes y outliers antes de usar FLAI</li>
+            <li><strong>Variables categóricas:</strong> Asegúrate de que estén bien codificadas (usa <code>transform=True</code>)</li>
+            <li><strong>Tamaño mínimo:</strong> Datasets con al menos 1000 registros dan mejores resultados</li>
+            <li><strong>Balance de clases:</strong> Verifica que no haya clases extremadamente desbalanceadas</li>
+          </ul>
+
+          <h3>📊 Interpretación de Métricas</h3>
+          <div class="example-code">
+            <pre><code># Guía de interpretación
+def interpretar_fairness(df_fairness):
+    """Interpreta automáticamente los resultados de fairness"""
+    for _, row in df_fairness.iterrows():
+        eqi, eqa, f = row['EQI'], row['EQA'], row['F']
+        
+        print(f"🔍 Grupo: {row['group']} vs {row['reference']}")
+        
+        # Interpretación EQI (Equidad)
+        if abs(eqi) < 0.02:
+            print("  ✅ EQI: Equidad excelente")
+        elif abs(eqi) < 0.05:
+            print("  ⚠️ EQI: Ligera inequidad")
+        else:
+            print("  ❌ EQI: Inequidad significativa")
+            
+        # Interpretación EQA (Igualdad)  
+        if abs(eqa) < 0.02:
+            print("  ✅ EQA: Igualdad excelente")
+        elif abs(eqa) < 0.05:
+            print("  ⚠️ EQA: Ligera desigualdad")
+        else:
+            print("  ❌ EQA: Desigualdad significativa")
+            
+        # Recomendación
+        if f < 0.03:
+            print("  🎯 Recomendación: Dataset justo, no necesita mitigación")
+        elif f < 0.08:
+            print("  🔧 Recomendación: Considerar mitigación ligera")
+        else:
+            print("  🚨 Recomendación: Mitigación urgente necesaria")
+        print()
+
+# Uso
+interpretar_fairness(df_fairness)</code></pre>
+          </div>
+
+          <h3>🛠️ Estrategias de Mitigación</h3>
+          <ul>
+            <li><strong>Mitigación suave:</strong> Para F entre 0.03-0.08, usa solo <code>mitigate_calculation_cpd()</code></li>
+            <li><strong>Mitigación completa:</strong> Para F > 0.08, combina ambos métodos</li>
+            <li><strong>Validación cruzada:</strong> Siempre valida en datos de test independientes</li>
+            <li><strong>Trade-offs:</strong> Monitorea accuracy vs fairness para encontrar el balance óptimo</li>
+          </ul>
+
+          <h3>🚀 Optimización de Performance</h3>
+          <div class="example-code">
+            <pre><code># Configuración para datasets grandes
+import warnings
+warnings.filterwarnings('ignore')  # Silenciar warnings no críticos
+
+# Para datasets > 10K registros
+flai_dataset = data.Data(
+    large_df.sample(5000),  # Muestreo para acelerar
+    transform=True,
+    verbose=0  # Reducir output
+)
+
+# Construcción rápida de grafo
+flai_graph = causal_graph.CausalGraph(
+    flai_dataset,
+    target='label',
+    indepence_test=False,  # Omitir test para acelerar
+    verbose=0
+)
+
+# Generación eficiente de datos
+fair_data = flai_graph.generate_dataset(
+    n_samples=min(1000, len(original_data)),  # Limitar tamaño
+    methodtype='bayes'
+)</code></pre>
+          </div>
+
+          <h3>⚠️ Limitaciones y Consideraciones</h3>
+          <ul>
+            <li><strong>Causalidad vs Correlación:</strong> FLAI asume relaciones causales, valida con conocimiento del dominio</li>
+            <li><strong>Variables proxy:</strong> Cuidado con variables que indirectamente codifican información sensible</li>
+            <li><strong>Contexto legal:</strong> Siempre consulta regulaciones locales sobre fairness algorítmica</li>
+            <li><strong>Validación humana:</strong> Los resultados deben ser validados por expertos en el dominio</li>
+          </ul>
+
+          <div class="research-highlight">
+            <h4>📚 Recursos Adicionales</h4>
+            <ul>
+              <li><a href="https://github.com/rugonzs/FLAI" target="_blank">📁 Repositorio GitHub</a> - Código fuente y ejemplos</li>
+              <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S0952197624021389" target="_blank">📄 Paper Principal</a> - Fundamentos teóricos</li>
+              <li><a href="../demo/" target="_blank">🧪 Demo Interactiva</a> - Prueba FLAI en tu navegador</li>
+              <li><a href="mailto:rubo.g@icloud.com">✉️ Contacto Directo</a> - Soporte del desarrollador</li>
+            </ul>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer>
+      <p>© <span id="year"></span> FLAI Documentation | Desarrollado por <a href="https://rubengonzalez.ai" target="_blank">Rubén González-Sendino</a></p>
+      <p>
+        <a href="./">🏠 Inicio</a> · 
+        <a href="./demo/">📊 Demo</a> · 
+        <a href="https://github.com/rugonzs/FLAI" target="_blank">GitHub</a> · 
+        <a href="https://pypi.org/project/flai-causal/" target="_blank">PyPI</a>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    
+    // Smooth scrolling para TOC
+    document.querySelectorAll('.toc a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Highlight TOC item activo
+    const sections = document.querySelectorAll('.api-section');
+    const tocLinks = document.querySelectorAll('.toc a');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          tocLinks.forEach(link => {
+            link.style.color = link.getAttribute('href') === `#${id}` ? 'var(--accent)' : 'var(--muted)';
+            link.style.background = link.getAttribute('href') === `#${id}` ? 'var(--accent-light)' : 'transparent';
+          });
+        }
+      });
+    }, { rootMargin: '-100px 0px -60% 0px' });
+
+    sections.forEach(section => observer.observe(section));
+
+    // Animaciones
+    const animationObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animation = 'fadeInUp 0.6s ease-out';
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.api-section').forEach(el => {
+      animationObserver.observe(el);
+    });
+  </script>
+</body>
+</html>
