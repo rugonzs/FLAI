@@ -31,3 +31,7 @@ pre{white-space:pre-wrap;word-wrap:break-word}
   .list{grid-template-columns:1fr}
   .kpis{grid-template-columns:1fr}
 }
+.table{width:100%; border-collapse:collapse; background:#0f1526; border:1px solid #1a243a; border-radius:12px; overflow:hidden}
+.table th,.table td{padding:10px 12px; border-bottom:1px solid #1a243a; text-align:left}
+.table thead th{background:#0f1729; color:#cdd6ea; position:sticky; top:0}
+.table tbody tr:hover{background:#0e1424}

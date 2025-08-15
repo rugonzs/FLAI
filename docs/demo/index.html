@@ -177,7 +177,7 @@ def _gen_example(low_bias=True, n=200):
 def load_example1():
     df, label = _gen_example(low_bias=True)
     state["df"] = df
-    display(df.head().to_html(index=False), target="table-preview")
+    display(df.head(10).to_html(index=False, classes='table', border=0), target="table-preview")
     th = float(js.document.getElementById("threshold").value)
     out = compute_metrics(df, threshold=th)
     render(out, label=label)
@@ -185,7 +185,7 @@ def load_example1():
 def load_example2():
     df, label = _gen_example(low_bias=False)
     state["df"] = df
-    display(df.head().to_html(index=False), target="table-preview")
+    display(df.head(10).to_html(index=False, classes='table', border=0), target="table-preview")
     th = float(js.document.getElementById("threshold").value)
     out = compute_metrics(df, threshold=th)
     render(out, label=label)
@@ -193,7 +193,7 @@ def load_example2():
 def on_file(text):
     df = parse_csv(text)
     state["df"] = df
-    display(df.head().to_html(index=False), target="table-preview")
+    display(df.head(10).to_html(index=False, classes='table', border=0), target="table-preview")
     th = float(js.document.getElementById("threshold").value)
     out = compute_metrics(df, threshold=th)
     render(out, label="CSV subido")
