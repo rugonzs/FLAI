@@ -6,7 +6,12 @@
   <title>FLAI — Demo en el navegador</title>
   <meta name="description" content="Demo ligera que calcula métricas de equidad/igualdad (proxies) en el navegador con PyScript/Pyodide."/>
   <link rel="stylesheet" href="../assets/styles.css" />
-  <!-- PyScript (pin a versión estable) -->
+  <style>
+    .table{width:100%; border-collapse:collapse; background:#0f1526; border:1px solid #1a243a; border-radius:12px; overflow:hidden}
+    .table th,.table td{padding:10px 12px; border-bottom:1px solid #1a243a; text-align:left}
+    .table thead th{background:#0f1729; color:#cdd6ea; position:sticky; top:0}
+    .table tbody tr:hover{background:#0e1424}
+  </style>
   <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
   <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 </head>
@@ -39,18 +44,7 @@
 
   <section class="section card">
     <h3>1) Datos</h3>
-    <details>
-      <summary>Formato esperado</summary>
-      <pre>
-Columnas mínimas:
-- group  (string/int)  → grupo sensible (p.ej. 0/1, F/M, etc.)
-- y_true (0/1)         → etiqueta real
-- y_pred (0/1)         → predicción (o usa score y umbral)
-Opcional:
-- score (0..1)         → probabilidad / score
-      </pre>
-    </details>
-    <div class="nav">
+    <div class="nav" style="margin-bottom:8px;">
       <input id="file" type="file" accept=".csv" />
     </div>
     <div id="table-preview" class="section"></div>
@@ -72,7 +66,6 @@ Opcional:
   </footer>
 </div>
 
-<!-- Python que corre en el navegador -->
 <script type="py" config='{"packages": ["pandas", "numpy"]}'>
 from pyscript import display
 import pandas as pd
@@ -80,6 +73,9 @@ import numpy as np
 import io, js, random
 
 state = {"df": None}
+
+def _write_html(target_id, html):
+    js.document.getElementById(target_id).innerHTML = html
 
 def parse_csv(text):
     df = pd.read_csv(io.StringIO(text))
@@ -96,7 +92,6 @@ def compute_metrics(df, threshold=0.5):
     if len(groups) != 2:
         raise ValueError("Esta demo admite 2 grupos para simplificar (en tus datos hay %d)" % len(groups))
     g0, g1 = sorted(groups)
-    # tasas
     def rate_pos(g):
         sub = df[df["group"].astype(str)==g]
         return (sub["y_pred"]==1).mean()
@@ -106,10 +101,9 @@ def compute_metrics(df, threshold=0.5):
     def fpr(g):
         sub = df[(df["group"].astype(str)==g) & (df["y_true"]==0)]
         return (sub["y_pred"]==1).mean() if len(sub) else float("nan")
-    # métricas
-    spd = rate_pos(g1) - rate_pos(g0)                # Statistical Parity Difference
-    eod = tpr(g1) - tpr(g0)                           # Equal Opportunity Difference
-    di  = (rate_pos(g0)+1e-12)/(rate_pos(g1)+1e-12)  # Disparate Impact (g0/g1)
+    spd = rate_pos(g1) - rate_pos(g0)
+    eod = tpr(g1) - tpr(g0)
+    di  = (rate_pos(g0)+1e-12)/(rate_pos(g1)+1e-12)
     out = {
         "grupos": [g0, g1],
         "paridad_positiva": [rate_pos(g0), rate_pos(g1)],
@@ -154,19 +148,17 @@ def render(out, label=""):
       </div>
     </div>
     '''
-    display(html, target="results")
+    _write_html("results", html)
 
 def _gen_example(low_bias=True, n=200):
     random.seed(42); np.random.seed(42)
     group = np.random.choice(["A","B"], size=n, p=[0.5,0.5])
     if low_bias:
-        # Prevalencia muy parecida y efecto de grupo mínimo
         base = 0.5 + 0.02*(group=="B")
         y_true = (np.random.rand(n) < base).astype(int)
         score  = np.clip(0.35 + 0.5*y_true + 0.02*(group=="B") + np.random.randn(n)*0.18, 0, 1)
         label = "Ejemplo 1 · bajo sesgo"
     else:
-        # Prevalencia distinta y score con efecto de grupo mayor (sesgo)
         base = 0.45 + 0.12*(group=="B")
         y_true = (np.random.rand(n) < base).astype(int)
         score  = np.clip(0.28 + 0.55*y_true + 0.15*(group=="B") + np.random.randn(n)*0.20, 0, 1)
@@ -177,7 +169,8 @@ def _gen_example(low_bias=True, n=200):
 def load_example1():
     df, label = _gen_example(low_bias=True)
     state["df"] = df
-    display(df.head(10).to_html(index=False, classes='table', border=0), target="table-preview")
+    table_html = df.head(10).to_html(index=False, classes="table", border=0)
+    _write_html("table-preview", table_html)
     th = float(js.document.getElementById("threshold").value)
     out = compute_metrics(df, threshold=th)
     render(out, label=label)
@@ -185,7 +178,8 @@ def load_example1():
 def load_example2():
     df, label = _gen_example(low_bias=False)
     state["df"] = df
-    display(df.head(10).to_html(index=False, classes='table', border=0), target="table-preview")
+    table_html = df.head(10).to_html(index=False, classes="table", border=0)
+    _write_html("table-preview", table_html)
     th = float(js.document.getElementById("threshold").value)
     out = compute_metrics(df, threshold=th)
     render(out, label=label)
@@ -193,7 +187,8 @@ def load_example2():
 def on_file(text):
     df = parse_csv(text)
     state["df"] = df
-    display(df.head(10).to_html(index=False, classes='table', border=0), target="table-preview")
+    table_html = df.head(10).to_html(index=False, classes="table", border=0)
+    _write_html("table-preview", table_html)
     th = float(js.document.getElementById("threshold").value)
     out = compute_metrics(df, threshold=th)
     render(out, label="CSV subido")
@@ -205,7 +200,6 @@ def on_threshold():
     out = compute_metrics(state["df"], threshold=th)
     render(out)
 
-# Exponer a JS
 js.window.py_load_example1 = load_example1
 js.window.py_load_example2 = load_example2
 js.window.py_on_file = on_file
@@ -213,7 +207,6 @@ js.window.py_on_threshold = on_threshold
 </script>
 
 <script>
-  // JS puente con PyScript
   const file = document.getElementById('file');
   const ex1 = document.getElementById('btn-ex1');
   const ex2 = document.getElementById('btn-ex2');
@@ -232,6 +225,10 @@ js.window.py_on_threshold = on_threshold
   th.addEventListener('input', () => {
     thv.textContent = Number(th.value).toFixed(2);
     window.py_on_threshold();
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    if (window.py_load_example1) window.py_load_example1();
   });
 </script>
 </body>
