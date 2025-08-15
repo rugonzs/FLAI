@@ -19,11 +19,11 @@ jobs:
           pip install sphinx autodocsumm sphinx-rtd-theme
       - name: Build to docs/doc
         run: |
-          sphinx-build -b html docs docs/sphinx
+          sphinx-build -b html docs docs/doc
       - name: Commit built HTML
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "[email protected]"
-          git add docs/sphinx
-          git commit -m "CI: build Sphinx HTML to docs/sphinx" || echo "No changes"
+          git add docs/doc
+          git commit -m "CI: build Sphinx HTML to docs/doc" || echo "No changes"
           git push
