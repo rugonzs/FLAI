@@ -1,0 +1,29 @@
+name: Build Sphinx to docs/doc (manual)
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install sphinx autodocsumm sphinx-rtd-theme
+      - name: Build to docs/doc
+        run: |
+          sphinx-build -b html docs docs/sphinx
+      - name: Commit built HTML
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "[email protected]"
+          git add docs/sphinx
+          git commit -m "CI: build Sphinx HTML to docs/sphinx" || echo "No changes"
+          git push
