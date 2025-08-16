@@ -91,12 +91,26 @@
     }
     
     .code-block {
-      background: var(--bg-secondary);
+      background: #0c0d0e;
+      color: #ffffff;
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 20px;
       margin: 20px 0;
       overflow-x: auto;
+    }
+    
+    .code-block pre {
+      margin: 0;
+      color: #ffffff;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    
+    .code-block code {
+      color: #ffffff;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
     }
     
     .results-section {
@@ -201,14 +215,16 @@
 <body>
   <div class="container">
     <header class="header">
-      <div class="brand">🔬 FLAI</div>
-      <nav class="nav">
-        <a href="../">🏠 Home</a>
-        <a href="./">📊 Demo</a>
-        <a href="../documentation.html">📖 Docs</a>
-        <a href="https://github.com/rugonzs/FLAI" target="_blank">GitHub</a>
-        <a href="https://pypi.org/project/flai-causal/" target="_blank">PyPI</a>
-      </nav>
+      <div class="header-content">
+        <div class="brand">🔬 FLAI</div>
+        <nav class="nav">
+          <a href="../#problem">The Problem</a>
+          <a href="../#solution">Our Solution</a>
+          <a href="./">Interactive Demo</a>
+          <a href="../documentation.html">Documentation</a>
+          <a href="https://github.com/rugonzs/FLAI" target="_blank">GitHub</a>
+        </nav>
+      </div>
     </header>
 
     <section class="hero">

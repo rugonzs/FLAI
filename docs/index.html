@@ -104,47 +104,92 @@
       </div>
     </section>
 
-    <section class="section section-vibrant" id="solution">
+    <section class="section section-alt" id="solution">
       <div class="container">
-        <h2>How FLAI Works: The Science Behind Fair AI</h2>
-        <div class="grid grid-3">
-          <div class="card card-feature card-enhanced">
-            <h3>🎯 1. Precision Detection</h3>
-            <p><strong>Revolutionary Fairness Metrics</strong></p>
-            <p>Our research introduces the first metrics that distinguish between <em>Equality</em> (equal outcomes) and <em>Equity</em> (equal opportunities) — giving you precise insight into exactly what type of bias exists.</p>
-            <div class="code-block">
-              <pre><code>df_fairness = flai_dataset.fairness_eqa_eqi(
-    features=['education', 'experience'],
-    target_column='hiring_decision',
-    column_filter=['gender']
-)</code></pre>
+        <div class="text-center" style="margin-bottom: 3rem;">
+          <h2>How FLAI Works: The Science Behind Fair AI</h2>
+          <p style="font-size: 1.125rem; color: var(--text-light); margin-bottom: 0;">Three breakthrough innovations that work together to eliminate AI bias</p>
+        </div>
+        
+        <!-- Workflow Cycle -->
+        <div class="workflow-cycle">
+          <div class="cycle-container">
+            
+            <!-- Step 1: Detection -->
+            <div class="cycle-step" data-step="1">
+              <div class="step-icon">🎯</div>
+              <div class="step-content">
+                <h3>Precision Detection</h3>
+                <p><strong>Revolutionary Two-Dimensional Metrics</strong></p>
+                <p>First metrics to distinguish <em>Equality</em> (equal outcomes) from <em>Equity</em> (equal opportunities). Know exactly what type of bias exists.</p>
+                <div class="step-metric">
+                  <span class="metric">EQA + EQI = Comprehensive Fairness</span>
+                </div>
+              </div>
             </div>
+            
+            <!-- Arrow 1 -->
+            <div class="cycle-arrow">
+              <div class="arrow">→</div>
+              <span class="arrow-label">Analyze</span>
+            </div>
+            
+            <!-- Step 2: Understanding -->
+            <div class="cycle-step" data-step="2">
+              <div class="step-icon">🧠</div>
+              <div class="step-content">
+                <h3>Causal Intelligence</h3>
+                <p><strong>Understand the "Why" Behind Bias</strong></p>
+                <p>Build Bayesian causal networks that reveal hidden bias pathways. See exactly how discrimination flows through your system.</p>
+                <div class="step-metric">
+                  <span class="metric">Causal Graph → Root Cause</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Arrow 2 -->
+            <div class="cycle-arrow">
+              <div class="arrow">→</div>
+              <span class="arrow-label">Model</span>
+            </div>
+            
+            <!-- Step 3: Mitigation -->
+            <div class="cycle-step" data-step="3">
+              <div class="step-icon">⚖️</div>
+              <div class="step-content">
+                <h3>Intelligent Mitigation</h3>
+                <p><strong>Fix at the Source</strong></p>
+                <p>Reshape causal relationships AND generate synthetic fair datasets. Preserve utility while eliminating discrimination.</p>
+                <div class="step-metric">
+                  <span class="metric">0% Bias + 99.2% Utility</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Arrow 3 (back to start) -->
+            <div class="cycle-arrow cycle-return">
+              <div class="arrow">↺</div>
+              <span class="arrow-label">Verify</span>
+            </div>
+            
           </div>
           
-          <div class="card card-feature card-enhanced">
-            <h3>🧠 2. Causal Intelligence</h3>
-            <p><strong>Understand the "Why" Behind Bias</strong></p>
-            <p>Build Bayesian causal networks that reveal hidden bias pathways. See exactly how discrimination flows through your system and which variables are the real culprits.</p>
-            <div class="code-block">
-              <pre><code>causal_model = CausalGraph(
-    dataset, 
-    target='decision'
-)
-causal_model.plot(directed=True)</code></pre>
-            </div>
-          </div>
-          
-          <div class="card card-feature card-enhanced">
-            <h3>⚖️ 3. Intelligent Mitigation</h3>
-            <p><strong>Fix at the Source</strong></p>
-            <p>Dual-approach mitigation: reshape causal relationships AND generate synthetic fair datasets for training new models. Preserve data utility while eliminating bias.</p>
-            <div class="code-block">
-              <pre><code>causal_model.mitigate_edge_relation(
-    sensible_feature=['gender', 'race']
-)
-fair_data = causal_model.generate_dataset(
-    n_samples=10000
-)</code></pre>
+          <!-- Results Summary -->
+          <div class="cycle-results">
+            <h4>The Complete Solution</h4>
+            <div class="results-grid">
+              <div class="result-item">
+                <span class="result-number">100%</span>
+                <span class="result-label">Bias Elimination</span>
+              </div>
+              <div class="result-item">
+                <span class="result-number">99.2%</span>
+                <span class="result-label">Utility Preserved</span>
+              </div>
+              <div class="result-item">
+                <span class="result-number">3</span>
+                <span class="result-label">Peer-Reviewed Papers</span>
+              </div>
             </div>
           </div>
         </div>
@@ -220,10 +265,7 @@ fair_data = causal_model.generate_dataset(
           </div>
         </div>
         
-        <div class="feature-highlight">
-          <h4>🎓 Academic Pedigree</h4>
-          <p>Developed by <strong>Rubén González-Sendino</strong> during his PhD research at Universidad Politécnica de Madrid, supervised by leading AI ethics researchers Emilio Serrano and Javier Bajo. Published in top-tier journals and presented at international conferences.</p>
-        </div>
+
       </div>
     </section>
 
