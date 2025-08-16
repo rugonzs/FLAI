@@ -2,7 +2,6 @@
 <div align="center">
   <img src="Documents/flai_icon.png" alt="FLAI Logo" width="200"/>
 </div>
-
 # FLAI : Fairness Learning in Artificial Intelligence
 
 [![Upload Python Package](https://github.com/rugonzs/FLAI/actions/workflows/python-publish.yml/badge.svg)](https://github.com/rugonzs/FLAI/actions/workflows/python-publish.yml)
@@ -17,7 +16,7 @@
 
 [![Downloads](https://static.pepy.tech/badge/flai-causal/week)](https://pepy.tech/project/flai-causal)
 
-Python library developed by Rubén González during his phD. research. His mission? To mitigate bias and discrimination through the application of causal algorithms. Use the citation at the bottom to reference this work.
+Python library developed by Rubén González-Sendino during his phD. research. His mission? To mitigate bias and discrimination through the application of causal algorithms. Use the citation at the bottom to reference this work.
 
 [Demo](https://www.rubengonzalez.ai/demo)
 
