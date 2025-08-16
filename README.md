@@ -1,4 +1,7 @@
 
+<div align="center">
+  <img src="Documents/flai_icon.png" alt="FLAI Logo" width="200"/>
+</div>
 
 # FLAI : Fairness Learning in Artificial Intelligence
 
