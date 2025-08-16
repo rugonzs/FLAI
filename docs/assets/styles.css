@@ -36,6 +36,8 @@
   
   /* Pastel Background */
   --pastel-blue: #f0f8ff;
+  --card-blue: #e6f3ff;
+  --card-blue-dark: #d1e9ff;
   
   /* Semantic Colors - Anthropic approach */
   --text: var(--gray-900);
@@ -194,15 +196,15 @@ a:hover {
 }
 
 .section-alt {
-  background: var(--gray-50);
+  /* Remove background to maintain pastel blue */
 }
 
 .section-vibrant {
-  background: var(--white);
+  /* Remove background to maintain pastel blue */
 }
 
 .dynamic-section {
-  background: var(--gray-50);
+  /* Remove background to maintain pastel blue */
 }
 
 /* Grid System */
@@ -228,9 +230,9 @@ a:hover {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom: none;
   padding: var(--space-sm) 0;
 }
 
@@ -332,8 +334,8 @@ a:hover {
 
 /* Cards - Anthropic-inspired minimal approach */
 .card {
-  background: var(--white);
-  border: 1px solid var(--border);
+  background: var(--card-blue);
+  border: 1px solid var(--primary);
   border-radius: var(--radius-lg);
   padding: clamp(1.5rem, 4vw, 2.5rem);
   transition: var(--transition);
@@ -379,7 +381,7 @@ a:hover {
 
 /* Hero Section - Clean Anthropic style */
 .hero {
-  background: var(--white);
+  background: transparent;
   padding: clamp(4rem, 12vw, 8rem) 0;
   text-align: center;
 }
@@ -1687,8 +1689,8 @@ a:focus,
   gap: var(--space-xl);
   margin-bottom: var(--space-4xl);
   padding: var(--space-xl);
-  background: var(--white);
-  border: 1px solid var(--border);
+  background: var(--card-blue);
+  border: 1px solid var(--primary);
   border-radius: var(--radius-lg);
   transition: var(--transition);
 }
@@ -1756,6 +1758,86 @@ a:focus,
   }
 }
 
+/* Visual Typography Variety */
+.big-quote {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--primary);
+  text-align: center;
+  margin: var(--space-2xl) 0;
+  line-height: 1.2;
+  font-style: italic;
+}
+
+.highlight-text {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.impact-number {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 0.8;
+  display: block;
+}
+
+.small-caps {
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+.strike-through {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.emphasis-box {
+  background: var(--primary-bg);
+  border-left: 4px solid var(--primary);
+  padding: var(--space) var(--space-xl);
+  margin: var(--space-xl) 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.contrast-text {
+  background: var(--primary);
+  color: var(--white);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius);
+  font-weight: 600;
+  display: inline;
+}
+
+.mega-stat {
+  text-align: center;
+  margin: var(--space-4xl) 0;
+}
+
+.mega-stat .number {
+  font-size: clamp(4rem, 10vw, 8rem);
+  font-weight: 900;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 0.8;
+  display: block;
+}
+
+.mega-stat .label {
+  font-size: var(--text-xl);
+  color: var(--text-light);
+  font-weight: 600;
+  margin-top: var(--space);
+}
+
 /* Section headers - Anthropic style */
 .section-header {
   text-align: center;
@@ -1780,8 +1862,8 @@ a:focus,
 }
 
 .comparison-item {
-  background: var(--white);
-  border: 1px solid var(--border);
+  background: var(--card-blue);
+  border: 1px solid var(--primary);
   border-radius: var(--radius-lg);
   padding: var(--space-2xl);
   transition: var(--transition);
