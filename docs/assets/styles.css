@@ -67,9 +67,9 @@
   --space: 1rem;
   --space-lg: 1.5rem;
   --space-xl: 2rem;
-  --space-2xl: 3rem;
-  --space-3xl: 4rem;
-  --space-4xl: 6rem;
+  --space-2xl: 2rem;
+  --space-3xl: 2.5rem;
+  --space-4xl: 3rem;
   
   /* Typography Scale */
   --text-xs: 0.75rem;
@@ -170,11 +170,15 @@ a:hover {
 }
 
 .section {
-  padding: var(--space-4xl) 0;
+  padding: var(--space-3xl) 0;
 }
 
 .section-lg {
-  padding: var(--space-4xl) 0 var(--space-4xl) 0;
+  padding: var(--space-4xl) 0;
+}
+
+.section-alt {
+  background: var(--bg-light);
 }
 
 /* Grid System */
@@ -203,7 +207,7 @@ a:hover {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
-  padding: var(--space) 0;
+  padding: var(--space-sm) 0;
 }
 
 .header-content {
@@ -307,7 +311,7 @@ a:hover {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: var(--space-2xl);
+  padding: var(--space-xl);
   box-shadow: var(--shadow-sm);
   transition: var(--transition-slow);
   position: relative;
@@ -337,7 +341,7 @@ a:hover {
 /* Hero Section */
 .hero {
   background: linear-gradient(135deg, var(--bg-light) 0%, var(--white) 100%);
-  padding: var(--space-4xl) 0;
+  padding: var(--space-3xl) 0;
   text-align: center;
 }
 
@@ -409,7 +413,7 @@ a:hover {
 /* Code Blocks */
 .code-block {
   background: var(--gray-900);
-  color: var(--gray-100);
+  color: var(--white);
   padding: var(--space-xl);
   border-radius: var(--radius-lg);
   overflow-x: auto;
@@ -422,6 +426,12 @@ a:hover {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: var(--text-sm);
   line-height: 1.6;
+  color: var(--white);
+}
+
+.code-block code {
+  color: var(--white);
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
 }
 
 .code-inline {
@@ -633,22 +643,39 @@ a:hover {
 }
 
 @media (max-width: 768px) {
+  .header {
+    position: relative;
+    padding: var(--space-xs) 0;
+  }
+  
   .nav {
-    flex-direction: column;
-    gap: var(--space);
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    justify-content: center;
+  }
+  
+  .nav a {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-sm);
   }
   
   .header-content {
     flex-direction: column;
-    gap: var(--space);
+    gap: var(--space-xs);
+  }
+  
+  .brand {
+    font-size: var(--text-xl);
+    text-align: center;
   }
   
   .section {
-    padding: var(--space-2xl) 0;
+    padding: var(--space-xl) 0;
   }
   
   .card {
-    padding: var(--space-xl);
+    padding: var(--space-lg);
   }
   
   .tabs {

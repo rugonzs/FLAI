@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FLAI — Demo Interactiva | Métricas de Fairness en Acción</title>
-  <meta name="description" content="Descubre cómo FLAI detecta y mitiga sesgos algorítmicos con ejemplos reales. Explora la métrica bidimensional Equidad-Igualdad y generación de datos justos."/>
+  <title>FLAI — Interactive Demo | Fairness Metrics in Action</title>
+  <meta name="description" content="Discover how FLAI detects and mitigates algorithmic bias with real examples. Explore the two-dimensional Equity-Equality metrics and fair data generation."/>
   <link rel="stylesheet" href="../assets/styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -203,7 +203,7 @@
     <header class="header">
       <div class="brand">🔬 FLAI</div>
       <nav class="nav">
-        <a href="../">🏠 Inicio</a>
+        <a href="../">🏠 Home</a>
         <a href="./">📊 Demo</a>
         <a href="../documentation.html">📖 Docs</a>
         <a href="https://github.com/rugonzs/FLAI" target="_blank">GitHub</a>
@@ -213,61 +213,61 @@
 
     <section class="hero">
       <div>
-        <div class="badge">🧪 Demo Interactiva con Datos Reales</div>
-        <h1>Explora FLAI en Acción</h1>
-        <p>Descubre cómo FLAI detecta, mide y mitiga sesgos algorítmicos usando los mismos datasets y ejemplos del repositorio oficial. Desde la métrica bidimensional hasta la generación de datos justos.</p>
+        <div class="badge">🧪 Interactive Demo with Real Data</div>
+        <h1>Explore FLAI in Action</h1>
+        <p>Discover how FLAI detects, measures and mitigates algorithmic bias using the same datasets and examples from the official repository. From two-dimensional metrics to fair data generation.</p>
       </div>
     </section>
 
     <div class="demo-container">
       <div class="demo-tabs">
         <div class="demo-tab active" data-tab="metrics">
-          📊 Métrica Bidimensional
+          📊 Two-Dimensional Metrics
         </div>
         <div class="demo-tab" data-tab="workflow">
-          🔄 Flujo Completo
+          🔄 Complete Workflow
         </div>
         <div class="demo-tab" data-tab="examples">
-          📚 Casos de Estudio
+          📚 Case Studies
         </div>
         <div class="demo-tab" data-tab="code">
-          💻 Código en Vivo
+          💻 Live Code
         </div>
       </div>
 
       <!-- Tab 1: Métrica Bidimensional -->
       <div id="metrics" class="demo-content active">
         <div class="card">
-          <h2>🎯 Métrica Bidimensional: Equidad vs Igualdad</h2>
-          <p>FLAI introduce la primera métrica que distingue conceptualmente dos tipos de discriminación:</p>
+          <h2>🎯 Two-Dimensional Metrics: Equity vs Equality</h2>
+          <p>FLAI introduces the first metric that conceptually distinguishes between two types of discrimination:</p>
           
           <div class="grid">
             <div class="card">
-              <h3>📏 Igualdad (EQA)</h3>
-              <p><strong>Statistical Parity:</strong> ¿Los grupos obtienen los mismos resultados?</p>
-              <p>Mide si la proporción de resultados positivos es similar entre grupos.</p>
+              <h3>📏 Equality (EQA)</h3>
+              <p><strong>Statistical Parity:</strong> Do groups achieve the same outcomes?</p>
+              <p>Measures whether the proportion of positive outcomes is similar across groups.</p>
               <code>EQA = |P(Y=1|G=0) - P(Y=1|G=1)|</code>
             </div>
             <div class="card">
-              <h3>⚖️ Equidad (EQI)</h3>
-              <p><strong>Equal Opportunity:</strong> ¿Los grupos tienen las mismas oportunidades?</p>
-              <p>Mide si los verdaderos positivos se detectan igual en ambos grupos.</p>
+              <h3>⚖️ Equity (EQI)</h3>
+              <p><strong>Equal Opportunity:</strong> Do groups have the same opportunities?</p>
+              <p>Measures whether true positives are detected equally across both groups.</p>
               <code>EQI = |P(Ŷ=1|Y=1,G=0) - P(Ŷ=1|Y=1,G=1)|</code>
             </div>
           </div>
 
           <div class="results-section">
-            <h3>🔍 Ejemplo: Dataset Adult (Predicción de Ingresos)</h3>
-            <p>Comparamos grupos por género en la predicción de ingresos >50K:</p>
+            <h3>🔍 Example: Adult Dataset (Income Prediction)</h3>
+            <p>We compare groups by gender in predicting income >50K:</p>
             
             <div class="metrics-grid">
               <div class="metric-card">
                 <div class="metric-value bad">-0.04</div>
-                <div class="metric-label">EQI (Equidad)</div>
+                <div class="metric-label">EQI (Equity)</div>
               </div>
               <div class="metric-card">
                 <div class="metric-value bad">0.08</div>
-                <div class="metric-label">EQA (Igualdad)</div>
+                <div class="metric-label">EQA (Equality)</div>
               </div>
               <div class="metric-card">
                 <div class="metric-value bad">0.09</div>
@@ -280,10 +280,10 @@
             </div>
 
             <div class="research-highlight">
-              <h4>💡 Interpretación</h4>
-              <p><strong>EQI negativo:</strong> Las mujeres tienen menor tasa de verdaderos positivos (menor oportunidad)</p>
-              <p><strong>EQA positivo:</strong> Diferencia en la distribución general de predicciones positivas</p>
-              <p><strong>Fairness = √(0.08² + 0.04²) = 0.09:</strong> Nivel moderado de sesgo detectado</p>
+              <h4>💡 Interpretation</h4>
+              <p><strong>Negative EQI:</strong> Women have lower true positive rate (less opportunity)</p>
+              <p><strong>Positive EQA:</strong> Difference in overall distribution of positive predictions</p>
+              <p><strong>Fairness = √(0.08² + 0.04²) = 0.09:</strong> Moderate level of bias detected</p>
             </div>
           </div>
         </div>
@@ -292,83 +292,83 @@
       <!-- Tab 2: Flujo Completo -->
       <div id="workflow" class="demo-content">
         <div class="card">
-          <h2>🔄 Flujo Completo de Mitigación</h2>
-          <p>FLAI implementa un proceso integral desde la detección hasta la mitigación:</p>
+          <h2>🔄 Complete Mitigation Workflow</h2>
+          <p>FLAI implements a comprehensive process from detection to mitigation:</p>
 
           <div class="workflow-steps">
             <div class="workflow-step" data-step="1">
-              <div class="step-title">🔍 Detección de Sesgos</div>
-              <p>Cargamos el dataset y calculamos métricas de fairness bidimensionales</p>
+              <div class="step-title">🔍 Bias Detection</div>
+              <p>Load the dataset and calculate two-dimensional fairness metrics</p>
               <code>flai_dataset = data.Data(df, transform=True)</code>
             </div>
             
             <div class="workflow-step" data-step="2">
-              <div class="step-title">🧠 Modelado Causal</div>
-              <p>Construimos un grafo bayesiano que explica las relaciones causales</p>
+              <div class="step-title">🧠 Causal Modeling</div>
+              <p>Build a Bayesian graph that explains causal relationships</p>
               <code>flai_graph = CausalGraph(flai_dataset, target='label')</code>
             </div>
             
             <div class="workflow-step" data-step="3">
-              <div class="step-title">⚖️ Mitigación</div>
-              <p>Ajustamos relaciones causales y tablas de probabilidad</p>
+              <div class="step-title">⚖️ Mitigation</div>
+              <p>Adjust causal relationships and probability tables</p>
               <code>flai_graph.mitigate_edge_relation(sensible_feature=['sex','age'])</code>
             </div>
             
             <div class="workflow-step" data-step="4">
-              <div class="step-title">📊 Generación de Datos</div>
-              <p>Creamos datasets sintéticos libres de sesgo</p>
+              <div class="step-title">📊 Data Generation</div>
+              <p>Create synthetic datasets free from bias</p>
               <code>fair_data = flai_graph.generate_dataset(n_samples=1000)</code>
             </div>
           </div>
 
           <div class="results-section">
-            <h3>📈 Resultados de Mitigación: Dataset Adult</h3>
+            <h3>📈 Mitigation Results: Adult Dataset</h3>
             
             <table class="comparison-table">
               <thead>
                 <tr>
-                  <th>Métrica</th>
+                  <th>Metric</th>
                   <th>Original</th>
-                  <th>Post-Mitigación</th>
-                  <th>Mejora</th>
+                  <th>Post-Mitigation</th>
+                  <th>Improvement</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>EQI (Equidad)</strong></td>
+                  <td><strong>EQI (Equity)</strong></td>
                   <td style="color: var(--error);">-0.04</td>
                   <td style="color: var(--success);">0.00</td>
-                  <td style="color: var(--success);">✅ Eliminado</td>
+                  <td style="color: var(--success);">✅ Eliminated</td>
                 </tr>
                 <tr>
-                  <td><strong>EQA (Igualdad)</strong></td>
+                  <td><strong>EQA (Equality)</strong></td>
                   <td style="color: var(--error);">0.08</td>
                   <td style="color: var(--success);">0.00</td>
-                  <td style="color: var(--success);">✅ Eliminado</td>
+                  <td style="color: var(--success);">✅ Eliminated</td>
                 </tr>
                 <tr>
                   <td><strong>Fairness Global</strong></td>
                   <td style="color: var(--error);">0.09</td>
                   <td style="color: var(--success);">0.00</td>
-                  <td style="color: var(--success);">✅ Perfecto</td>
+                  <td style="color: var(--success);">✅ Perfect</td>
                 </tr>
                 <tr>
                   <td><strong>Accuracy</strong></td>
                   <td>0.758</td>
                   <td>0.746</td>
-                  <td style="color: var(--warning);">📊 Leve reducción</td>
+                  <td style="color: var(--warning);">📊 Slight reduction</td>
                 </tr>
               </tbody>
             </table>
 
             <div class="fairness-visualization">
-              <h4>Visualización del Progreso</h4>
+              <h4>Progress Visualization</h4>
               <div>
                 <div class="fairness-curve original"></div>
                 <span>→</span>
                 <div class="fairness-curve mitigated"></div>
               </div>
-              <p>De <span style="color: var(--error);">sesgo detectado</span> a <span style="color: var(--success);">fairness completa</span></p>
+              <p>From <span style="color: var(--error);">detected bias</span> to <span style="color: var(--success);">complete fairness</span></p>
             </div>
           </div>
         </div>
@@ -377,15 +377,15 @@
       <!-- Tab 3: Casos de Estudio -->
       <div id="examples" class="demo-content">
         <div class="card">
-          <h2>📚 Casos de Estudio Reales</h2>
-          <p>Exploramos los mismos datasets usados en la investigación:</p>
+          <h2>📚 Real Case Studies</h2>
+          <p>We explore the same datasets used in the research:</p>
 
           <div class="grid">
             <div class="card">
               <h3>👥 Adult Census Dataset</h3>
-              <p><strong>Objetivo:</strong> Predecir ingresos >50K basado en características demográficas</p>
-              <p><strong>Variable sensible:</strong> Género, Edad</p>
-              <p><strong>Hallazgos:</strong> Sesgo significativo contra mujeres y personas jóvenes</p>
+              <p><strong>Objective:</strong> Predict income >50K based on demographic characteristics</p>
+              <p><strong>Sensitive variable:</strong> Gender, Age</p>
+              <p><strong>Findings:</strong> Significant bias against women and young people</p>
               
               <div class="code-block">
                 <pre><code>df_f, datos_f = flai_dataset.fairness_eqa_eqi(
@@ -396,14 +396,14 @@
 )</code></pre>
               </div>
               
-              <p><strong>Resultado:</strong> EQI=-0.04, EQA=0.08, F=0.09</p>
+              <p><strong>Result:</strong> EQI=-0.04, EQA=0.08, F=0.09</p>
             </div>
 
             <div class="card">
               <h3>⚖️ COMPAS Recidivism</h3>
-              <p><strong>Objetivo:</strong> Predecir riesgo de reincidencia criminal</p>
-              <p><strong>Variable sensible:</strong> Raza</p>
-              <p><strong>Hallazgos:</strong> Discriminación racial en algoritmos de justicia</p>
+              <p><strong>Objective:</strong> Predict criminal recidivism risk</p>
+              <p><strong>Sensitive variable:</strong> Race</p>
+              <p><strong>Findings:</strong> Racial discrimination in justice algorithms</p>
               
               <div class="code-block">
                 <pre><code>compas_graph = CausalGraph(compas_data, target='risk_score')
@@ -412,14 +412,14 @@ compas_graph.mitigate_calculation_cpd(
 )</code></pre>
               </div>
               
-              <p><strong>Impacto:</strong> Reducción del 85% en sesgos raciales</p>
+              <p><strong>Impact:</strong> 85% reduction in racial bias</p>
             </div>
 
             <div class="card">
               <h3>💳 German Credit Dataset</h3>
-              <p><strong>Objetivo:</strong> Decisiones de crédito bancario</p>
-              <p><strong>Variable sensible:</strong> Género, Edad</p>
-              <p><strong>Hallazgos:</strong> Sesgo en contra de mujeres jóvenes</p>
+              <p><strong>Objective:</strong> Bank credit decisions</p>
+              <p><strong>Sensitive variable:</strong> Gender, Age</p>
+              <p><strong>Findings:</strong> Bias against young women</p>
               
               <div class="code-block">
                 <pre><code>fair_credit_data = credit_graph.generate_dataset(
@@ -428,13 +428,13 @@ compas_graph.mitigate_calculation_cpd(
 )</code></pre>
               </div>
               
-              <p><strong>Resultado:</strong> Dataset justo para entrenar nuevos modelos</p>
+              <p><strong>Result:</strong> Fair dataset for training new models</p>
             </div>
           </div>
 
           <div class="research-highlight">
-            <h4>🏆 Validación Científica</h4>
-            <p>Estos resultados han sido <strong>peer-reviewed</strong> y publicados en:</p>
+            <h4>🏆 Scientific Validation</h4>
+            <p>These results have been <strong>peer-reviewed</strong> and published in:</p>
             <ul>
               <li>Engineering Applications of Artificial Intelligence (2025)</li>
               <li>Future Generation Computer Systems (2024)</li>
@@ -447,99 +447,99 @@ compas_graph.mitigate_calculation_cpd(
       <!-- Tab 4: Código en Vivo -->
       <div id="code" class="demo-content">
         <div class="card">
-          <h2>💻 Prueba FLAI en tu Navegador</h2>
-          <p>Ejecuta código real de FLAI usando PyScript. Los datos se procesan completamente en tu navegador:</p>
+          <h2>💻 Test FLAI in Your Browser</h2>
+          <p>Run real FLAI code using PyScript. Data is processed entirely in your browser:</p>
 
           <div class="code-block">
-            <h3>🐍 Código Python Ejecutable</h3>
-            <pre><code id="demo-code"># Simulamos el comportamiento de FLAI con datos sintéticos
+            <h3>🐍 Executable Python Code</h3>
+            <pre><code id="demo-code"># Simulate FLAI behavior with synthetic data
 import pandas as pd
 import numpy as np
 import random
 
-# Función para simular la métrica EQA-EQI de FLAI
-def calcular_fairness_flai(datos, grupo_col, target_col):
-    grupos = datos[grupo_col].unique()
-    if len(grupos) != 2:
-        return "Error: Necesitamos exactamente 2 grupos"
+# Function to simulate FLAI's EQA-EQI metric
+def calculate_fairness_flai(data, group_col, target_col):
+    groups = data[group_col].unique()
+    if len(groups) != 2:
+        return "Error: Need exactly 2 groups"
     
-    g0, g1 = grupos[0], grupos[1]
+    g0, g1 = groups[0], groups[1]
     
-    # Calcular EQA (Igualdad) - Statistical Parity
-    tasa_g0 = datos[datos[grupo_col] == g0][target_col].mean()
-    tasa_g1 = datos[datos[grupo_col] == g1][target_col].mean()
-    eqa = abs(tasa_g1 - tasa_g0)
+    # Calculate EQA (Equality) - Statistical Parity
+    rate_g0 = data[data[group_col] == g0][target_col].mean()
+    rate_g1 = data[data[group_col] == g1][target_col].mean()
+    eqa = abs(rate_g1 - rate_g0)
     
-    # Simular EQI (Equidad) - Equal Opportunity
-    # En datos reales, esto requeriría ground truth
-    eqi = abs(np.random.normal(0, 0.02))  # Simulado
+    # Simulate EQI (Equity) - Equal Opportunity
+    # In real data, this would require ground truth
+    eqi = abs(np.random.normal(0, 0.02))  # Simulated
     
-    # Fairness global
+    # Global fairness
     fairness = np.sqrt(eqa**2 + eqi**2)
     
     return {
-        'EQA (Igualdad)': round(eqa, 3),
-        'EQI (Equidad)': round(eqi, 3),
-        'Fairness Global': round(fairness, 3),
-        'Grupo Privilegiado': f"{g1} (tasa: {tasa_g1:.3f})",
-        'Grupo Desprivilegiado': f"{g0} (tasa: {tasa_g0:.3f})"
+        'EQA (Equality)': round(eqa, 3),
+        'EQI (Equity)': round(eqi, 3),
+        'Global Fairness': round(fairness, 3),
+        'Privileged Group': f"{g1} (rate: {rate_g1:.3f})",
+        'Unprivileged Group': f"{g0} (rate: {rate_g0:.3f})"
     }
 
-# Generar datos sintéticos similares al Adult dataset
+# Generate synthetic data similar to Adult dataset
 np.random.seed(42)
 random.seed(42)
 
-datos_ejemplo = pd.DataFrame({
-    'genero': np.random.choice(['Mujer', 'Hombre'], 1000, p=[0.4, 0.6]),
-    'educacion': np.random.choice([0, 1, 2, 3], 1000, p=[0.3, 0.3, 0.3, 0.1]),
-    'ingreso_alto': np.random.choice([0, 1], 1000, p=[0.7, 0.3])
+sample_data = pd.DataFrame({
+    'gender': np.random.choice(['Female', 'Male'], 1000, p=[0.4, 0.6]),
+    'education': np.random.choice([0, 1, 2, 3], 1000, p=[0.3, 0.3, 0.3, 0.1]),
+    'high_income': np.random.choice([0, 1], 1000, p=[0.7, 0.3])
 })
 
-# Introducir sesgo artificial: hombres tienen más probabilidad de ingreso alto
-mask_hombre = datos_ejemplo['genero'] == 'Hombre'
-datos_ejemplo.loc[mask_hombre, 'ingreso_alto'] = np.random.choice(
-    [0, 1], mask_hombre.sum(), p=[0.6, 0.4]  # 40% vs 30%
+# Introduce artificial bias: males have higher probability of high income
+male_mask = sample_data['gender'] == 'Male'
+sample_data.loc[male_mask, 'high_income'] = np.random.choice(
+    [0, 1], male_mask.sum(), p=[0.6, 0.4]  # 40% vs 30%
 )
 
-print("=== DEMO FLAI: Detección de Sesgos ===\\n")
-print("📊 Dataset Sintético Generado:")
-print(f"   • Tamaño: {len(datos_ejemplo)} registros")
-print(f"   • Mujeres: {(datos_ejemplo['genero']=='Mujer').sum()}")
-print(f"   • Hombres: {(datos_ejemplo['genero']=='Hombre').sum()}")
+print("=== FLAI DEMO: Bias Detection ===\\n")
+print("📊 Synthetic Dataset Generated:")
+print(f"   • Size: {len(sample_data)} records")
+print(f"   • Females: {(sample_data['gender']=='Female').sum()}")
+print(f"   • Males: {(sample_data['gender']=='Male').sum()}")
 print()
 
-# Calcular métricas de fairness
-resultado = calcular_fairness_flai(datos_ejemplo, 'genero', 'ingreso_alto')
+# Calculate fairness metrics
+result = calculate_fairness_flai(sample_data, 'gender', 'high_income')
 
-print("🔍 Análisis de Fairness (Método FLAI):")
-for clave, valor in resultado.items():
-    print(f"   • {clave}: {valor}")
+print("🔍 Fairness Analysis (FLAI Method):")
+for key, value in result.items():
+    print(f"   • {key}: {value}")
 
 print()
-print("📋 Interpretación:")
-if resultado['Fairness Global'] > 0.05:
-    print("   ⚠️  SESGO DETECTADO - Se requiere mitigación")
-    print("   🔧 Recomendación: Aplicar mitigación causal con FLAI")
+print("📋 Interpretation:")
+if result['Global Fairness'] > 0.05:
+    print("   ⚠️  BIAS DETECTED - Mitigation required")
+    print("   🔧 Recommendation: Apply causal mitigation with FLAI")
 else:
-    print("   ✅ Dataset justo - No se detecta sesgo significativo")
+    print("   ✅ Fair dataset - No significant bias detected")
 
 print()
-print("🚀 Para usar FLAI en tu proyecto:")
+print("🚀 To use FLAI in your project:")
 print("   pip install flai-causal")
-print("   # Ver ejemplos completos en GitHub.com/rugonzs/FLAI")</code></pre>
+print("   # See complete examples at GitHub.com/rugonzs/FLAI")</code></pre>
           </div>
 
-          <button id="run-code" class="btn">▶️ Ejecutar Código</button>
+          <button id="run-code" class="btn">▶️ Run Code</button>
           
           <div id="code-output" class="results-section" style="display:none;">
-            <h3>📤 Salida del Código</h3>
+            <h3>📤 Code Output</h3>
             <pre id="output-content" style="background: var(--bg-secondary); padding: 20px; border-radius: 8px; color: var(--text); font-family: monospace;"></pre>
           </div>
 
           <div class="research-highlight">
-            <h4>⚡ Tecnología Utilizada</h4>
-            <p>Esta demo usa <strong>PyScript/Pyodide</strong> para ejecutar Python real en el navegador. El código mostrado es una simulación educativa del comportamiento de FLAI.</p>
-            <p>Para análisis completos con datos reales, instala FLAI en tu entorno Python local.</p>
+            <h4>⚡ Technology Used</h4>
+            <p>This demo uses <strong>PyScript/Pyodide</strong> to run real Python in the browser. The shown code is an educational simulation of FLAI's behavior.</p>
+            <p>For complete analysis with real data, install FLAI in your local Python environment.</p>
           </div>
         </div>
       </div>
@@ -547,21 +547,21 @@ print("   # Ver ejemplos completos en GitHub.com/rugonzs/FLAI")</code></pre>
 
     <section class="section">
       <div class="card">
-        <h2>🚀 ¿Listo para Empezar?</h2>
+        <h2>🚀 Ready to Get Started?</h2>
         <div class="grid">
           <div>
-            <h3>📦 Instalación</h3>
-            <p>Instala FLAI en tu proyecto Python:</p>
+            <h3>📦 Installation</h3>
+            <p>Install FLAI in your Python project:</p>
             <code>pip install flai-causal</code>
           </div>
           <div>
-            <h3>📖 Documentación</h3>
-            <p>Explora ejemplos completos y tutoriales:</p>
+            <h3>📖 Documentation</h3>
+            <p>Explore complete examples and tutorials:</p>
             <a href="../documentation.html" class="btn secondary">Ver Docs</a>
           </div>
           <div>
-            <h3>📄 Investigación</h3>
-            <p>Lee los papers que fundamentan FLAI:</p>
+            <h3>📄 Research</h3>
+            <p>Read the papers that support FLAI:</p>
             <a href="../#investigacion" class="btn secondary">Ver Papers</a>
           </div>
         </div>
@@ -569,8 +569,8 @@ print("   # Ver ejemplos completos en GitHub.com/rugonzs/FLAI")</code></pre>
     </section>
 
     <footer>
-      <p>© <span id="year"></span> FLAI Demo | Desarrollado por <a href="https://rubengonzalez.ai" target="_blank">Rubén González-Sendino</a></p>
-      <p>Datos procesados localmente en tu navegador • <a href="../">🏠 Volver al inicio</a></p>
+      <p>© <span id="year"></span> FLAI Demo | Developed by <a href="https://rubengonzalez.ai" target="_blank">Rubén González-Sendino</a></p>
+      <p>Data processed locally in your browser • <a href="../">🏠 Back to home</a></p>
     </footer>
   </div>
 
@@ -596,32 +596,32 @@ print("   # Ver ejemplos completos en GitHub.com/rugonzs/FLAI")</code></pre>
       const output = document.getElementById('code-output');
       const content = document.getElementById('output-content');
       
-      // Simular ejecución del código
-      content.textContent = 'Ejecutando código Python...';
+      // Simulate code execution
+      content.textContent = 'Running Python code...';
       output.style.display = 'block';
       
       setTimeout(() => {
-        content.textContent = `=== DEMO FLAI: Detección de Sesgos ===
+        content.textContent = `=== FLAI DEMO: Bias Detection ===
 
-📊 Dataset Sintético Generado:
-   • Tamaño: 1000 registros
-   • Mujeres: 400
-   • Hombres: 600
+📊 Synthetic Dataset Generated:
+   • Size: 1000 records
+   • Females: 400
+   • Males: 600
 
-🔍 Análisis de Fairness (Método FLAI):
-   • EQA (Igualdad): 0.087
-   • EQI (Equidad): 0.023
-   • Fairness Global: 0.090
-   • Grupo Privilegiado: Hombre (tasa: 0.402)
-   • Grupo Desprivilegiado: Mujer (tasa: 0.315)
+🔍 Fairness Analysis (FLAI Method):
+   • EQA (Equality): 0.087
+   • EQI (Equity): 0.023
+   • Global Fairness: 0.090
+   • Privileged Group: Male (rate: 0.402)
+   • Unprivileged Group: Female (rate: 0.315)
 
-📋 Interpretación:
-   ⚠️  SESGO DETECTADO - Se requiere mitigación
-   🔧 Recomendación: Aplicar mitigación causal con FLAI
+📋 Interpretation:
+   ⚠️  BIAS DETECTED - Mitigation required
+   🔧 Recommendation: Apply causal mitigation with FLAI
 
-🚀 Para usar FLAI en tu proyecto:
+🚀 To use FLAI in your project:
    pip install flai-causal
-   # Ver ejemplos completos en GitHub.com/rugonzs/FLAI`;
+   # See complete examples at GitHub.com/rugonzs/FLAI`;
       }, 1000);
     });
 
