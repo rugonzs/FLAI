@@ -1,47 +1,48 @@
-/* FLAI - Clean & Professional Design */
+/* FLAI - Anthropic-inspired Clean Design with Blue Identity */
 :root {
-  /* Primary Brand Colors - Clean and professional */
-  --primary: #2563eb;
-  --primary-light: #60a5fa;
-  --primary-dark: #1d4ed8;
-  --primary-bg: rgba(37, 99, 235, 0.05);
+  /* Primary Brand Colors - Deep blues for sophistication */
+  --primary: #1e40af;
+  --primary-light: #3b82f6;
+  --primary-dark: #1e3a8a;
+  --primary-bg: rgba(30, 64, 175, 0.04);
   
-  /* Secondary Colors - Sophisticated purple */
-  --secondary: #7c3aed;
-  --secondary-light: #a78bfa;
-  --secondary-dark: #5b21b6;
-  --secondary-bg: rgba(124, 58, 237, 0.05);
+  /* Secondary Colors - Complementary slate tones */
+  --secondary: #475569;
+  --secondary-light: #64748b;
+  --secondary-dark: #334155;
+  --secondary-bg: rgba(71, 85, 105, 0.04);
   
-  /* Accent Colors - Minimal and purposeful */
-  --accent: #06b6d4;
-  --accent-light: #67e8f9;
-  --accent-dark: #0891b2;
+  /* Accent Colors - Sophisticated palette */
+  --accent: #0ea5e9;
+  --accent-light: #38bdf8;
+  --accent-dark: #0284c7;
   --warning: #f59e0b;
-  --success: #10b981;
-  --info: #3b82f6;
+  --success: #059669;
+  --info: #0ea5e9;
   
-  /* Neutral Palette - Clean and modern */
+  /* Anthropic-inspired Neutral Palette */
   --white: #ffffff;
-  --gray-50: #fafbfc;
-  --gray-100: #f4f6f8;
-  --gray-200: #e9ecef;
-  --gray-300: #dee2e6;
-  --gray-400: #ced4da;
-  --gray-500: #6c757d;
-  --gray-600: #495057;
-  --gray-700: #343a40;
-  --gray-800: #212529;
-  --gray-900: #0c0d0e;
+  --gray-25: #fcfcfd;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
   
-  /* Semantic Colors */
-  --text: var(--gray-800);
-  --text-light: var(--gray-600);
+  /* Semantic Colors - Anthropic approach */
+  --text: var(--gray-900);
+  --text-light: var(--gray-700);
   --text-muted: var(--gray-500);
   --border: var(--gray-200);
   --border-light: var(--gray-100);
   --bg: var(--white);
-  --bg-light: var(--gray-50);
-  --bg-section: var(--gray-100);
+  --bg-light: var(--gray-25);
+  --bg-section: var(--gray-50);
   
   /* Subtle Gradients - Clean and professional */
   --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
@@ -75,17 +76,17 @@
   --space-3xl: 2.5rem;
   --space-4xl: 3rem;
   
-  /* Typography Scale */
+  /* Typography Scale - Anthropic-inspired fluid scaling */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
   --text-lg: 1.125rem;
-  --text-xl: 1.25rem;
-  --text-2xl: 1.5rem;
-  --text-3xl: 1.875rem;
-  --text-4xl: 2.25rem;
-  --text-5xl: 3rem;
-  --text-6xl: 3.75rem;
+  --text-xl: clamp(1.25rem, 2.5vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 3vw, 2rem);
+  --text-3xl: clamp(1.875rem, 4vw, 2.5rem);
+  --text-4xl: clamp(2.25rem, 5vw, 3rem);
+  --text-5xl: clamp(3rem, 6vw, 4rem);
+  --text-6xl: clamp(3.75rem, 8vw, 5rem);
   
   /* Animation */
   --transition: all 0.15s ease-in-out;
@@ -105,54 +106,62 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
   color: var(--text);
   background-color: var(--bg);
   font-size: var(--text-base);
   overflow-x: hidden;
+  font-feature-settings: 'rlig' 1, 'calt' 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Typography */
+/* Typography - Anthropic-inspired hierarchy */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  line-height: 1.2;
+  font-weight: 600;
+  line-height: 1.1;
   margin: 0;
   color: var(--text);
+  letter-spacing: -0.025em;
 }
 
 h1 {
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 800;
-  background: var(--gradient-hero);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: var(--space-lg);
+  font-size: var(--text-6xl);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: var(--space-xl);
+  line-height: 1.05;
 }
 
 h2 {
   font-size: var(--text-4xl);
-  margin-bottom: var(--space);
+  margin-bottom: var(--space-xl);
   color: var(--text);
+  font-weight: 600;
 }
 
 h3 {
   font-size: var(--text-2xl);
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space);
   color: var(--text);
+  font-weight: 600;
 }
 
 h4 {
   font-size: var(--text-xl);
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space);
   color: var(--text);
+  font-weight: 600;
 }
 
 p {
-  margin-bottom: var(--space);
+  margin-bottom: var(--space-lg);
   color: var(--text-light);
   font-size: var(--text-lg);
+  line-height: 1.7;
+  max-width: 65ch;
 }
 
 a {
@@ -166,19 +175,19 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Layout Components */
+/* Layout Components - Anthropic-inspired */
 .container {
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--space-lg);
+  padding: 0 clamp(1rem, 4vw, 2rem);
 }
 
 .section {
-  padding: var(--space-3xl) 0;
+  padding: clamp(3rem, 8vw, 6rem) 0;
 }
 
 .section-lg {
-  padding: var(--space-4xl) 0;
+  padding: clamp(4rem, 10vw, 8rem) 0;
 }
 
 .section-alt {
@@ -318,21 +327,19 @@ a:hover {
   font-size: var(--text-lg);
 }
 
-/* Cards */
+/* Cards - Anthropic-inspired minimal approach */
 .card {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: var(--space-xl);
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition-slow);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  transition: var(--transition);
   position: relative;
-  overflow: hidden;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-xl);
+  border-color: var(--primary);
+  box-shadow: 0 1px 3px rgba(30, 64, 175, 0.1);
 }
 
 .card-feature {
@@ -346,8 +353,8 @@ a:hover {
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: var(--gradient-primary);
+  height: 2px;
+  background: var(--primary);
 }
 
 .card-enhanced {
@@ -356,59 +363,90 @@ a:hover {
 }
 
 .card-enhanced:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
   border-color: var(--primary);
 }
 
 .problem-card-enhanced {
-  border-left: 4px solid var(--accent);
+  border-left: 3px solid var(--accent);
 }
 
 .solution-card-enhanced {
-  border-left: 4px solid var(--primary);
+  border-left: 3px solid var(--primary);
 }
 
-/* Hero Section */
+/* Hero Section - Clean Anthropic style */
 .hero {
-  background: var(--gradient-subtle);
-  padding: var(--space-4xl) 0;
+  background: var(--white);
+  padding: clamp(4rem, 12vw, 8rem) 0;
   text-align: center;
 }
 
 .hero-content {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
 .hero-subtitle {
   font-size: var(--text-xl);
   color: var(--text-light);
-  margin-bottom: var(--space-2xl);
+  margin-bottom: var(--space-3xl);
   font-weight: 400;
+  line-height: 1.6;
+  max-width: 70ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero-actions {
   display: flex;
-  gap: var(--space);
+  gap: var(--space-lg);
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: var(--space-3xl);
+  margin-bottom: var(--space-4xl);
 }
 
-/* Badge */
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3xl);
+  flex-wrap: wrap;
+  margin-top: var(--space-4xl);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.stat-number {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.stat-text {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: lowercase;
+}
+
+/* Badge - Anthropic style */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: var(--space-sm);
-  padding: var(--space-sm) var(--space);
-  background: var(--primary-bg);
-  color: var(--primary);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--gray-100);
+  color: var(--text-muted);
   border-radius: var(--radius-full);
   font-size: var(--text-sm);
-  font-weight: 600;
-  margin-bottom: var(--space-lg);
-  border: 1px solid rgba(37, 99, 235, 0.2);
+  font-weight: 500;
+  margin-bottom: var(--space-2xl);
+  border: 1px solid var(--border);
 }
 
 /* Stats/KPIs */
@@ -1632,6 +1670,99 @@ a:focus,
   font-size: var(--text-sm);
   color: var(--text-muted);
   font-weight: 600;
+}
+
+/* Section headers - Anthropic style */
+.section-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto var(--space-4xl) auto;
+}
+
+.section-subtitle {
+  font-size: var(--text-xl);
+  color: var(--text-muted);
+  margin-top: var(--space);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* Comparison grid */
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--space-2xl);
+  margin: var(--space-4xl) 0;
+}
+
+.comparison-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  transition: var(--transition);
+}
+
+.comparison-item.featured {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px rgba(30, 64, 175, 0.1);
+}
+
+.comparison-item:hover {
+  border-color: var(--primary);
+}
+
+.comparison-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space);
+  border-bottom: 1px solid var(--border);
+}
+
+.comparison-header h3 {
+  margin: 0;
+  font-size: var(--text-2xl);
+}
+
+.comparison-badge {
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.comparison-badge.warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warning);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.comparison-badge.success {
+  background: rgba(30, 64, 175, 0.1);
+  color: var(--primary);
+  border: 1px solid rgba(30, 64, 175, 0.2);
+}
+
+.comparison-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.comparison-point h4 {
+  margin-bottom: var(--space-sm);
+  color: var(--text);
+  font-size: var(--text-lg);
+}
+
+.comparison-point p {
+  margin: 0;
+  color: var(--text-light);
+  line-height: 1.6;
 }
 
 /* Responsive Design for New Components */
