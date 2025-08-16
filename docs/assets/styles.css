@@ -34,6 +34,9 @@
   --gray-800: #1e293b;
   --gray-900: #0f172a;
   
+  /* Pastel Background */
+  --pastel-blue: #f0f8ff;
+  
   /* Semantic Colors - Anthropic approach */
   --text: var(--gray-900);
   --text-light: var(--gray-700);
@@ -109,7 +112,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
   color: var(--text);
-  background-color: var(--bg);
+  background-color: var(--pastel-blue);
   font-size: var(--text-base);
   overflow-x: hidden;
   font-feature-settings: 'rlig' 1, 'calt' 1;
@@ -1670,6 +1673,87 @@ a:focus,
   font-size: var(--text-sm);
   color: var(--text-muted);
   font-weight: 600;
+}
+
+/* Vertical Workflow - New Layout */
+.vertical-workflow {
+  max-width: 800px;
+  margin: var(--space-4xl) auto;
+}
+
+.workflow-step-vertical {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xl);
+  margin-bottom: var(--space-4xl);
+  padding: var(--space-xl);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: var(--transition);
+}
+
+.workflow-step-vertical:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+}
+
+.step-bubble {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.bubble-number {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: var(--white);
+}
+
+.step-content-vertical {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space);
+}
+
+.step-key {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-bg);
+  padding: var(--space-sm) var(--space);
+  border-radius: var(--radius);
+  border-left: 4px solid var(--primary);
+}
+
+.step-description h3 {
+  font-size: var(--text-xl);
+  color: var(--text);
+  margin-bottom: var(--space-sm);
+}
+
+.step-description p {
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .workflow-step-vertical {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space);
+  }
+  
+  .step-bubble {
+    align-self: center;
+  }
 }
 
 /* Section headers - Anthropic style */
